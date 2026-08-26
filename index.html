@@ -1462,9 +1462,10 @@ const UNITS = {
 };
 
 /* ===================== VERSION ===================== */
-const APP_VERSION = "3.8";
+const APP_VERSION = "3.9";
 const APP_VERSION_DATE = "26 août 2026";
 const CHANGELOG = [
+  { version:"3.9", date:"26 août 2026", note:"L'alarme du chrono d'étape passe en version martiale : timbre cuivré (fanfare), notes staccato, et un tambour de marche continu en fond — toujours sur la mélodie de « La Marseillaise » (domaine public)." },
   { version:"3.8", date:"26 août 2026", note:"L'alarme du chrono d'étape joue désormais les premières notes de « La Marseillaise » (mélodie du domaine public, interprétation façon boîte à musique synthétisée) au lieu d'un simple bip." },
   { version:"3.7", date:"26 août 2026", note:"Baguette Signature : suppression de la mention de limite de température (200°C) sur le four Worldtech dans le Matériel. Précision de la durée de pétrissage à la main (environ 15 à 30 minutes)." },
   { version:"3.6", date:"26 août 2026", note:"Extension du chrono d'étape (Démarrer/Pause/Réinit. + alarme) à toutes les recettes : Kouglof, Congolais, Pain au Lait Raisin, Madeleines, Bourguignon, Blanquette et Couscous, sur leurs phases de repos, fermentation, mijotage et cuisson respectives." },
@@ -2747,31 +2748,92 @@ function fmtTimer(ms){
 }
 
 let audioCtx = null;
+let noiseBuffer = null;
+function getNoiseBuffer(){
+  if(noiseBuffer) return noiseBuffer;
+  const n = Math.floor(audioCtx.sampleRate*0.3);
+  noiseBuffer = audioCtx.createBuffer(1, n, audioCtx.sampleRate);
+  const data = noiseBuffer.getChannelData(0);
+  for(let i=0;i<n;i++) data[i] = Math.random()*2-1;
+  return noiseBuffer;
+}
+
+function playSnare(t, dur, amp){
+  const src = audioCtx.createBufferSource();
+  src.buffer = getNoiseBuffer();
+  const gain = audioCtx.createGain();
+  gain.gain.setValueAtTime(amp, t);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  src.connect(gain).connect(audioCtx.destination);
+  src.start(t);
+  src.stop(t + dur);
+}
+
+function playKick(t, dur, amp){
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(120, t);
+  osc.frequency.exponentialRampToValueAtTime(35, t + dur);
+  gain.gain.setValueAtTime(amp, t);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  osc.connect(gain).connect(audioCtx.destination);
+  osc.start(t);
+  osc.stop(t + dur);
+}
+
+function playBrassNote(freq, t, dur){
+  // timbre "cuivre" épaissi : fondamentale + octave grave (corps) + octave aiguë (brillance),
+  // enveloppe staccato nette façon fanfare/marche
+  [ [freq,   "square",   0.22],
+    [freq/2, "square",   0.15],
+    [freq*2, "sine",     0.08],
+  ].forEach(([f,type,vol])=>{
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.value = f;
+    const sustainEnd = t + dur*0.6;
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.linearRampToValueAtTime(vol, t + 0.006);
+    gain.gain.setValueAtTime(vol, sustainEnd);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start(t);
+    osc.stop(t + dur);
+  });
+}
+
 function playAlarmBeep(){
   try{
     if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const now = audioCtx.currentTime;
-    // Premières notes de "La Marseillaise" (mélodie du domaine public, 1792) —
-    // interprétation simplifiée façon boîte à musique pour l'alarme.
-    // "Allons enfants de la Patrie,  le  jour  de  gloire  est   ar-ri-vé"
-    const notes = [392.00,392.00,392.00,587.33,392.00,493.88,440.00,392.00,
-                   587.33,587.33,523.25,493.88,440.00,392.00];
-    const durs  = [0.22,0.22,0.22,0.22,0.22,0.22,0.22,0.5,
-                   0.22,0.22,0.22,0.22,0.22,0.65];
-    let t = now;
+
+    // Notes de "La Marseillaise" (mélodie du domaine public, 1792), transcription
+    // en Sol majeur alignée sur les paroles "Allons enfants de la Patrie, le jour
+    // de gloire est arrivé" — interprétation martiale façon fanfare + tambour de marche.
+    const notes = [293.66, 392.00,392.00, 440.00,440.00, 587.33,
+                   493.88,392.00, 493.88,392.00, 329.63, 523.25, 440.00,349.23, 392.00];
+    const durs  = [0.18, 0.28,0.28, 0.28,0.28, 0.42,
+                   0.20,0.32, 0.20,0.20, 0.24, 0.48, 0.20,0.20, 0.70];
+    const gap = 0.018;
+
+    // tambour de marche continu (croches régulières, grosse caisse / caisse claire en alternance)
+    const totalDur = durs.reduce((a,b)=>a+b,0) + gap*durs.length;
+    const step = 0.14;
+    for(let i=0; i*step < totalDur; i++){
+      const tt = now + i*step;
+      if(i % 2 === 0) playKick(tt, 0.08, 0.16);
+      else playSnare(tt, 0.03, 0.10);
+    }
+
+    // mélodie cuivrée par-dessus, avec une petite frappe sur chaque attaque
+    let t = now + 0.05;
     notes.forEach((freq,i)=>{
       const d = durs[i];
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = "triangle";
-      osc.frequency.value = freq;
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.exponentialRampToValueAtTime(0.3, t + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + d*0.9);
-      osc.connect(gain).connect(audioCtx.destination);
-      osc.start(t);
-      osc.stop(t + d);
-      t += d;
+      playBrassNote(freq, t, d);
+      playSnare(t, 0.03, 0.15);
+      t += d + gap;
     });
   }catch(e){ /* audio non disponible, tant pis */ }
 }
@@ -2822,13 +2884,13 @@ function timerCompleted(state){
   if(navigator.vibrate) navigator.vibrate([300,150,300,150,300]);
   startTitleFlash();
 
-  // la sonnerie et la vibration se répètent (~4,5s, le temps que la phrase
+  // la sonnerie et la vibration se répètent (~5s, le temps que la phrase
   // musicale se termine) jusqu'à ce qu'on appuie sur "J'ai vu"
   alarmLoops[state.id] = setInterval(()=>{
     if(!state.alarmActive){ clearInterval(alarmLoops[state.id]); delete alarmLoops[state.id]; return; }
     playAlarmBeep();
     if(navigator.vibrate) navigator.vibrate([300,150,300]);
-  }, 4500);
+  }, 5500);
 
   if("Notification" in window && Notification.permission === "granted"){
     try{
