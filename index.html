@@ -1462,9 +1462,10 @@ const UNITS = {
 };
 
 /* ===================== VERSION ===================== */
-const APP_VERSION = "3.7";
+const APP_VERSION = "3.8";
 const APP_VERSION_DATE = "26 août 2026";
 const CHANGELOG = [
+  { version:"3.8", date:"26 août 2026", note:"L'alarme du chrono d'étape joue désormais les premières notes de « La Marseillaise » (mélodie du domaine public, interprétation façon boîte à musique synthétisée) au lieu d'un simple bip." },
   { version:"3.7", date:"26 août 2026", note:"Baguette Signature : suppression de la mention de limite de température (200°C) sur le four Worldtech dans le Matériel. Précision de la durée de pétrissage à la main (environ 15 à 30 minutes)." },
   { version:"3.6", date:"26 août 2026", note:"Extension du chrono d'étape (Démarrer/Pause/Réinit. + alarme) à toutes les recettes : Kouglof, Congolais, Pain au Lait Raisin, Madeleines, Bourguignon, Blanquette et Couscous, sur leurs phases de repos, fermentation, mijotage et cuisson respectives." },
   { version:"3.5", date:"26 août 2026", note:"Correction du bouton « Réinit. » du chrono d'étape : il remet désormais toujours la durée d'origine de la recette (ex. 20 min pour l'autolyse), même si on avait ajusté le temps avec -5/-1/+1/+5 avant de démarrer." },
@@ -2750,25 +2751,35 @@ function playAlarmBeep(){
   try{
     if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const now = audioCtx.currentTime;
-    for(let i=0;i<5;i++){
+    // Premières notes de "La Marseillaise" (mélodie du domaine public, 1792) —
+    // interprétation simplifiée façon boîte à musique pour l'alarme.
+    // "Allons enfants de la Patrie,  le  jour  de  gloire  est   ar-ri-vé"
+    const notes = [392.00,392.00,392.00,587.33,392.00,493.88,440.00,392.00,
+                   587.33,587.33,523.25,493.88,440.00,392.00];
+    const durs  = [0.22,0.22,0.22,0.22,0.22,0.22,0.22,0.5,
+                   0.22,0.22,0.22,0.22,0.22,0.65];
+    let t = now;
+    notes.forEach((freq,i)=>{
+      const d = durs[i];
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
-      osc.type = "sine";
-      osc.frequency.value = 880;
-      gain.gain.setValueAtTime(0.0001, now + i*0.55);
-      gain.gain.exponentialRampToValueAtTime(0.35, now + i*0.55 + 0.03);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + i*0.55 + 0.35);
+      osc.type = "triangle";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.0001, t);
+      gain.gain.exponentialRampToValueAtTime(0.3, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + d*0.9);
       osc.connect(gain).connect(audioCtx.destination);
-      osc.start(now + i*0.55);
-      osc.stop(now + i*0.55 + 0.4);
-    }
+      osc.start(t);
+      osc.stop(t + d);
+      t += d;
+    });
   }catch(e){ /* audio non disponible, tant pis */ }
 }
 
 /* ---- alarme persistante : continue (son + vibration + titre d'onglet)
    tant que personne n'a appuyé sur "J'ai vu" ---- */
 let notifAsked = false;
-const alarmLoops = {};   // stateId -> intervalId du bip répété
+const alarmLoops = {};   // stateId -> intervalId de la sonnerie répétée
 let titleFlashTimer = null;
 let originalTitle = document.title;
 
@@ -2811,13 +2822,13 @@ function timerCompleted(state){
   if(navigator.vibrate) navigator.vibrate([300,150,300,150,300]);
   startTitleFlash();
 
-  // le bip et la vibration se répètent toutes les 2,5s jusqu'à ce qu'on
-  // appuie sur "J'ai vu" (ou qu'on relance/réinitialise ce chrono)
+  // la sonnerie et la vibration se répètent (~4,5s, le temps que la phrase
+  // musicale se termine) jusqu'à ce qu'on appuie sur "J'ai vu"
   alarmLoops[state.id] = setInterval(()=>{
     if(!state.alarmActive){ clearInterval(alarmLoops[state.id]); delete alarmLoops[state.id]; return; }
     playAlarmBeep();
     if(navigator.vibrate) navigator.vibrate([300,150,300]);
-  }, 2500);
+  }, 4500);
 
   if("Notification" in window && Notification.permission === "granted"){
     try{
