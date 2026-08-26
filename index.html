@@ -692,6 +692,19 @@
     letter-spacing:0.3px;
   }
   .step-timer.done .tdisplay{ color:var(--rust); }
+  .step-timer.ringing{
+    animation:timerPulse 0.6s ease-in-out infinite;
+  }
+  .step-timer.ringing .tdismiss{
+    background:var(--rust);
+    color:#fff;
+    font-size:14px;
+    padding:10px 18px;
+    width:100%;
+  }
+  .step-timer.ringing .tbtns{
+    width:100%;
+  }
   .step-timer .tadjust{
     display:flex; gap:4px;
   }
@@ -1304,6 +1317,7 @@ const UI = {
   timerResume:{fr:"▶ Reprendre", en:"▶ Resume", de:"▶ Weiter", th:"▶ เริ่มต่อ"},
   timerReset:{fr:"⟲ Réinit.", en:"⟲ Reset", de:"⟲ Zurücksetzen", th:"⟲ รีเซ็ต"},
   timerDone:{fr:"⏰ Terminé !", en:"⏰ Time's up!", de:"⏰ Fertig!", th:"⏰ หมดเวลา!"},
+  timerDismiss:{fr:"🔕 J'ai vu", en:"🔕 Got it", de:"🔕 Verstanden", th:"🔕 รับทราบ"},
 
   /* ===== Onglet "À propos" ===== */
   aboutLangReminder:{
@@ -1448,9 +1462,11 @@ const UNITS = {
 };
 
 /* ===================== VERSION ===================== */
-const APP_VERSION = "3.3";
+const APP_VERSION = "3.5";
 const APP_VERSION_DATE = "26 août 2026";
 const CHANGELOG = [
+  { version:"3.5", date:"26 août 2026", note:"Correction du bouton « Réinit. » du chrono d'étape : il remet désormais toujours la durée d'origine de la recette (ex. 20 min pour l'autolyse), même si on avait ajusté le temps avec -5/-1/+1/+5 avant de démarrer." },
+  { version:"3.4", date:"26 août 2026", note:"Alarme du chrono d'étape rendue impossible à manquer : le bip et la vibration se répètent en boucle (au lieu d'une seule fois), le titre de l'onglet clignote « ⏰ Terminé ! », et la notification reste affichée à l'écran tant qu'on n'a pas appuyé sur le nouveau bouton « 🔕 J'ai vu ». Un site ne peut techniquement pas repasser devant une autre application, mais l'alarme reste active jusqu'à confirmation." },
   { version:"3.3", date:"26 août 2026", note:"Ajout d'un chrono d'étape (Démarrer/Pause/Réinitialiser + alarme sonore et visuelle) sur les phases de fermentation, repos et cuisson de la recette Baguette Signature — disponible dans la recette classique et dans le Mode Cuisine. La Baguette devient le premier onglet recette, juste après Inventaire et Courses." },
   { version:"3.2", date:"22 août 2026", note:"Le téléchargement de la liste de Courses (bouton Partager/Exporter, quand le partage natif n'est pas disponible) génère désormais un fichier HTML mis en forme — familles, cases à cocher, bilingue — au lieu d'un texte brut peu lisible." },
   { version:"3.1", date:"22 août 2026", note:"Refonte de la liste de Courses : dédoublonnage des ingrédients identiques entre l'Inventaire et les recettes, regroupement par famille réaliste (Légumes, Viandes, Produits laitiers, Farines, Sucres, Épices, Herbes, Fruits secs, Épicerie) au lieu d'un onglet par recette, suppression des quantités préremplies (à ajouter manuellement au besoin), affichage bilingue systématique (langue choisie + traduction thaïe juste à côté) pour faciliter les achats sur le terrain, et ajout d'un bouton Imprimer." },
@@ -2661,7 +2677,8 @@ function getTimerState(key, idx, defaultMin){
   if(!stepTimers[id]){
     stepTimers[id] = {
       id, key, idx,
-      duration: defaultMin,          // minutes, ajustable avant démarrage
+      baseDefault: defaultMin,        // durée d'origine de la recette (ne change jamais, sert au bouton Réinit.)
+      duration: defaultMin,           // minutes, ajustable avant démarrage (+1/+5/-1/-5)
       remainingMs: defaultMin*60000,
       running:false,
       endTime:null,
@@ -2700,17 +2717,71 @@ function playAlarmBeep(){
   }catch(e){ /* audio non disponible, tant pis */ }
 }
 
+/* ---- alarme persistante : continue (son + vibration + titre d'onglet)
+   tant que personne n'a appuyé sur "J'ai vu" ---- */
 let notifAsked = false;
+const alarmLoops = {};   // stateId -> intervalId du bip répété
+let titleFlashTimer = null;
+let originalTitle = document.title;
+
+function anyAlarmActive(){
+  return Object.values(stepTimers).some(s => s.alarmActive);
+}
+
+function startTitleFlash(){
+  if(titleFlashTimer) return;
+  let on = false;
+  titleFlashTimer = setInterval(()=>{
+    document.title = on ? originalTitle : UI.timerDone[currentLang];
+    on = !on;
+  }, 1000);
+}
+function stopTitleFlashIfIdle(){
+  if(!anyAlarmActive() && titleFlashTimer){
+    clearInterval(titleFlashTimer);
+    titleFlashTimer = null;
+    document.title = originalTitle;
+  }
+}
+
+function stopAlarm(state){
+  state.alarmActive = false;
+  if(alarmLoops[state.id]){
+    clearInterval(alarmLoops[state.id]);
+    delete alarmLoops[state.id];
+  }
+  stopTitleFlashIfIdle();
+}
+
 function timerCompleted(state){
   state.running = false;
   state.done = true;
   state.remainingMs = 0;
+  state.alarmActive = true;
+
   playAlarmBeep();
   if(navigator.vibrate) navigator.vibrate([300,150,300,150,300]);
-  if("Notification" in window && Notification.permission === "granted" && document.hidden){
-    try{ new Notification(UI.timerDone[currentLang]); }catch(e){}
+  startTitleFlash();
+
+  // le bip et la vibration se répètent toutes les 2,5s jusqu'à ce qu'on
+  // appuie sur "J'ai vu" (ou qu'on relance/réinitialise ce chrono)
+  alarmLoops[state.id] = setInterval(()=>{
+    if(!state.alarmActive){ clearInterval(alarmLoops[state.id]); delete alarmLoops[state.id]; return; }
+    playAlarmBeep();
+    if(navigator.vibrate) navigator.vibrate([300,150,300]);
+  }, 2500);
+
+  if("Notification" in window && Notification.permission === "granted"){
+    try{
+      new Notification(UI.timerDone[currentLang], {
+        body: UI.timerLabel[currentLang],
+        requireInteraction: true,  // reste affichée à l'écran, ne disparaît pas seule
+        tag: state.id,
+      });
+    }catch(e){}
   }
 }
+
 
 function timerTick(){
   const now = Date.now();
@@ -2755,22 +2826,28 @@ function timerWidgetHTML(key, idx, defaultMin, lang){
     : state.remainingMs < state.duration*60000 ? UI.timerResume[lang]
     : UI.timerStart[lang];
   return `
-    <div class="step-timer${state.done ? " done" : ""}" data-timer-id="${id}" data-key="${key}" data-idx="${idx}" data-default="${defaultMin}">
+    <div class="step-timer${state.done ? " done" : ""}${state.alarmActive ? " ringing" : ""}" data-timer-id="${id}" data-key="${key}" data-idx="${idx}" data-default="${defaultMin}">
       <span class="tlabel">⏱ ${UI.timerLabel[lang]}</span>
       <span class="tdisplay">${state.done ? UI.timerDone[lang] : fmtTimer(state.remainingMs)}</span>
-      <div class="tadjust">
-        <button type="button" class="tadj" data-delta="-5" ${state.running ? "disabled" : ""}>-5</button>
-        <button type="button" class="tadj" data-delta="-1" ${state.running ? "disabled" : ""}>-1</button>
-        <button type="button" class="tadj" data-delta="1" ${state.running ? "disabled" : ""}>+1</button>
-        <button type="button" class="tadj" data-delta="5" ${state.running ? "disabled" : ""}>+5</button>
-      </div>
-      <div class="tbtns">
-        ${state.running
-          ? `<button type="button" class="tmain tpause" data-tact="pause">${UI.timerPause[lang]}</button>`
-          : `<button type="button" class="tmain tstart" data-tact="start">${startLabel}</button>`
-        }
-        <button type="button" class="tmain treset" data-tact="reset">${UI.timerReset[lang]}</button>
-      </div>
+      ${state.alarmActive ? `
+        <div class="tbtns">
+          <button type="button" class="tmain tdismiss" data-tact="dismiss">${UI.timerDismiss[lang]}</button>
+        </div>
+      ` : `
+        <div class="tadjust">
+          <button type="button" class="tadj" data-delta="-5" ${state.running ? "disabled" : ""}>-5</button>
+          <button type="button" class="tadj" data-delta="-1" ${state.running ? "disabled" : ""}>-1</button>
+          <button type="button" class="tadj" data-delta="1" ${state.running ? "disabled" : ""}>+1</button>
+          <button type="button" class="tadj" data-delta="5" ${state.running ? "disabled" : ""}>+5</button>
+        </div>
+        <div class="tbtns">
+          ${state.running
+            ? `<button type="button" class="tmain tpause" data-tact="pause">${UI.timerPause[lang]}</button>`
+            : `<button type="button" class="tmain tstart" data-tact="start">${startLabel}</button>`
+          }
+          <button type="button" class="tmain treset" data-tact="reset">${UI.timerReset[lang]}</button>
+        </div>
+      `}
     </div>
   `;
 }
@@ -2800,6 +2877,7 @@ function initTimerWidgets(root){
           notifAsked = true;
           Notification.requestPermission();
         }
+        stopAlarm(state);
         if(state.remainingMs <= 0) state.remainingMs = state.duration*60000; // relance après échéance : repart du plein temps
         state.done = false;
         state.running = true;
@@ -2808,9 +2886,13 @@ function initTimerWidgets(root){
         state.running = false;
         state.remainingMs = Math.max(0, state.endTime - Date.now());
       } else if(act === "reset"){
+        stopAlarm(state);
         state.running = false;
         state.done = false;
-        state.remainingMs = state.duration*60000;
+        state.duration = state.baseDefault;      // revient à la durée d'origine (ex. 20 min), pas à la dernière valeur ajustée
+        state.remainingMs = state.baseDefault*60000;
+      } else if(act === "dismiss"){
+        stopAlarm(state);
       }
       changed = true;
     } else if(adjBtn && !state.running){
