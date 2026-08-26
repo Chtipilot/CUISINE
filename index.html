@@ -1462,9 +1462,11 @@ const UNITS = {
 };
 
 /* ===================== VERSION ===================== */
-const APP_VERSION = "3.5";
+const APP_VERSION = "3.7";
 const APP_VERSION_DATE = "26 août 2026";
 const CHANGELOG = [
+  { version:"3.7", date:"26 août 2026", note:"Baguette Signature : suppression de la mention de limite de température (200°C) sur le four Worldtech dans le Matériel. Précision de la durée de pétrissage à la main (environ 15 à 30 minutes)." },
+  { version:"3.6", date:"26 août 2026", note:"Extension du chrono d'étape (Démarrer/Pause/Réinit. + alarme) à toutes les recettes : Kouglof, Congolais, Pain au Lait Raisin, Madeleines, Bourguignon, Blanquette et Couscous, sur leurs phases de repos, fermentation, mijotage et cuisson respectives." },
   { version:"3.5", date:"26 août 2026", note:"Correction du bouton « Réinit. » du chrono d'étape : il remet désormais toujours la durée d'origine de la recette (ex. 20 min pour l'autolyse), même si on avait ajusté le temps avec -5/-1/+1/+5 avant de démarrer." },
   { version:"3.4", date:"26 août 2026", note:"Alarme du chrono d'étape rendue impossible à manquer : le bip et la vibration se répètent en boucle (au lieu d'une seule fois), le titre de l'onglet clignote « ⏰ Terminé ! », et la notification reste affichée à l'écran tant qu'on n'a pas appuyé sur le nouveau bouton « 🔕 J'ai vu ». Un site ne peut techniquement pas repasser devant une autre application, mais l'alarme reste active jusqu'à confirmation." },
   { version:"3.3", date:"26 août 2026", note:"Ajout d'un chrono d'étape (Démarrer/Pause/Réinitialiser + alarme sonore et visuelle) sur les phases de fermentation, repos et cuisson de la recette Baguette Signature — disponible dans la recette classique et dans le Mode Cuisine. La Baguette devient le premier onglet recette, juste après Inventaire et Courses." },
@@ -1717,6 +1719,13 @@ const recipes = {
       de:"Kouglof ist ein mit Backhefe gelockerter Teig. Das Backpulver (Best Odour) und das Natron (McGarrett) aus dem Bestand eignen sich nicht für dieses Rezept und werden hier nicht verwendet. Das Rezept ist auf das tatsächliche Fassungsvermögen der Förmchen abgestimmt (33 ml/Förmchen, mit Wasser gemessen) — das Ei zur genaueren Dosierung abwiegen.",
       th:"คูโกลฟเป็นแป้งที่ขึ้นฟูด้วยยีสต์ทำขนมปัง ผงฟู (Best Odour) และเบกกิ้งโซดา (McGarrett) ในคลังไม่เหมาะกับสูตรนี้และไม่ได้ใช้ในที่นี้ สูตรนี้คำนวณตามความจุจริงของพิมพ์ (33 มล./พิมพ์ วัดด้วยน้ำ) ควรชั่งน้ำหนักไข่เพื่อความแม่นยำ",
     },
+    /* index (0-based, hors {head}) -> durée par défaut en minutes */
+    timers:{
+      0:30,   // Trempage des raisins dans le rhum
+      6:100,  // Première pousse (1h30 à 2h)
+      9:50,   // Deuxième pousse (45 min à 1h)
+      11:11,  // Cuisson au four
+    },
   },
 
   congolais: {
@@ -1791,6 +1800,10 @@ const recipes = {
       de:"Anders als Kouglof enthält dieses Rezept weder Hefe noch eine Gehzeit: Die Masse wird direkt geformt und gebacken.",
       th:"ต่างจากคูโกลฟ สูตรนี้ไม่มียีสต์และไม่มีการพักให้ขึ้นฟู แป้งจะขึ้นรูปและอบได้ทันที",
     },
+    timers:{
+      5:16,   // Cuisson au four
+      6:5,    // Tiédir avant démoulage
+    },
   },
 
   baguette: {
@@ -1820,25 +1833,25 @@ const recipes = {
     ],
     equipment:{
       fr:[
-        "Four Worldtech — température maximale réellement disponible : 200°C.",
+        "Four Worldtech.",
         "Grilles ondulées spéciales pour le pain, en acier perforé antiadhésif noir.",
         "Lame de boulanger pour les grignes.",
         "Dispositif permettant de produire de la vapeur avec de l'eau bouillante.",
       ],
       en:[
-        "Worldtech oven — actual maximum usable temperature: 200°C.",
+        "Worldtech oven.",
         "Special corrugated bread racks, made of black non-stick perforated steel.",
         "Baker's lame for scoring.",
         "A device for producing steam with boiling water.",
       ],
       de:[
-        "Worldtech-Ofen — tatsächlich nutzbare Höchsttemperatur: 200°C.",
+        "Worldtech-Ofen.",
         "Spezielle gewellte Brotgitter aus schwarzem, antihaftbeschichtetem Lochstahl.",
         "Bäckerklinge zum Einschneiden.",
         "Vorrichtung zur Dampferzeugung mit kochendem Wasser.",
       ],
       th:[
-        "เตาอบ Worldtech — อุณหภูมิสูงสุดที่ใช้งานได้จริง: 200°C",
+        "เตาอบ Worldtech",
         "ตะแกรงลอนพิเศษสำหรับขนมปัง ทำจากเหล็กเจาะรูเคลือบกันติดสีดำ",
         "มีดกรีดขนมปังสำหรับทำรอยกรีด",
         "อุปกรณ์สำหรับสร้างไอน้ำด้วยน้ำเดือด",
@@ -1849,7 +1862,7 @@ const recipes = {
         {head:"1 — Pétrissage"},
         "Mélanger la farine avec 130 g d'eau et laisser reposer 20 minutes (autolyse).",
         "Ajouter les 10 g d'eau restants, puis la levure et le sel.",
-        "Pétrir jusqu'à obtenir une pâte souple, homogène et légèrement collante.",
+        "Pétrir jusqu'à obtenir une pâte souple, homogène et légèrement collante (environ 15 à 30 minutes).",
         "Former une boule.",
         {head:"2 — Première fermentation (1h15 à 1h30, autour de 30-31°C)"},
         "Faire un premier rabat après environ 30 minutes.",
@@ -1882,7 +1895,7 @@ const recipes = {
         {head:"1 — Kneading"},
         "Mix the flour with 130 g of water and let rest for 20 minutes (autolyse).",
         "Add the remaining 10 g of water, then the yeast and salt.",
-        "Knead until you get a soft, smooth, slightly sticky dough.",
+        "Knead until you get a soft, smooth, slightly sticky dough (about 15 to 30 minutes).",
         "Shape into a ball.",
         {head:"2 — First fermentation (1h15 to 1h30, around 30-31°C)"},
         "Do a first fold after about 30 minutes.",
@@ -1915,7 +1928,7 @@ const recipes = {
         {head:"1 — Kneten"},
         "Das Mehl mit 130 g Wasser vermischen und 20 Minuten ruhen lassen (Autolyse).",
         "Die restlichen 10 g Wasser zugeben, dann Hefe und Salz.",
-        "Kneten, bis ein weicher, homogener, leicht klebriger Teig entsteht.",
+        "Kneten, bis ein weicher, homogener, leicht klebriger Teig entsteht (etwa 15 bis 30 Minuten).",
         "Zu einer Kugel formen.",
         {head:"2 — Erste Gare (1:15 bis 1:30 Std., bei ca. 30-31°C)"},
         "Nach etwa 30 Minuten das erste Mal falten (Dehnen und Falten).",
@@ -1948,7 +1961,7 @@ const recipes = {
         {head:"1 — การนวดแป้ง"},
         "ผสมแป้งกับน้ำ 130 กรัม แล้วพักไว้ 20 นาที (ขั้นตอนออโตไลส์)",
         "ใส่น้ำที่เหลืออีก 10 กรัม ตามด้วยยีสต์และเกลือ",
-        "นวดจนได้แป้งที่นุ่ม เนียน และเหนียวเล็กน้อย",
+        "นวดจนได้แป้งที่นุ่ม เนียน และเหนียวเล็กน้อย (ประมาณ 15 ถึง 30 นาที)",
         "ขึ้นรูปเป็นก้อนกลม",
         {head:"2 — การหมักครั้งแรก (1 ชั่วโมง 15 นาที ถึง 1 ชั่วโมง 30 นาที ที่ 30-31°C)"},
         "พับแป้งครั้งแรกหลังจากผ่านไปประมาณ 30 นาที",
@@ -2202,6 +2215,17 @@ const recipes = {
       de:"Dieses Rezept wird mit Backpulver statt mit Backhefe gelockert, daher ist keine lange Hefegare nötig, der Teig reagiert aber weiterhin empfindlich auf die Temperatur (Ziel: 24-26°C am Ende des Knetens). Zu Beginn des Backens ein kleines Gefäß mit Wasser in den Ofen stellen, damit die Kruste nicht aufreißt.",
       th:"สูตรนี้ขึ้นฟูด้วยผงฟูแทนยีสต์ทำขนมปัง จึงไม่ต้องพักแป้งด้วยยีสต์เป็นเวลานาน แต่แป้งยังคงไวต่ออุณหภูมิ (เป้าหมายคือ 24-26°C หลังนวดเสร็จ) ควรวางภาชนะใส่น้ำในเตาอบช่วงเริ่มอบเพื่อป้องกันเปลือกขนมปังแตก",
     },
+    /* index (0-based, hors {head}) -> durée par défaut en minutes */
+    timers:{
+      3:7,    // Repos entre les pétrissages
+      10:30,  // Première pousse
+      11:30,  // Deuxième pousse
+      17:105, // Deuxième fermentation (1h30 à 2h)
+      19:10,  // Attente entre les deux couches de dorure
+      21:32,  // Cuisson
+      23:5,   // Attente avant démoulage
+      24:30,  // Refroidissement avant de couper
+    },
   },
 
   madeleines: {
@@ -2269,6 +2293,10 @@ const recipes = {
       en:"Shell mold 265 × 350 × 28 mm — 12 cavities filled level with the top. Reference yield: 24 madeleines, i.e. 2 batches of 12. For the second batch, let the mold cool before filling it again, to preserve the thermal contrast that helps form the hump. The oven used doesn't exceed 200°C, so the recipe is set at 200°C at first, then 180°C.",
       de:"Muschelform 265 × 350 × 28 mm — 12 Mulden, randvoll gefüllt. Richtwert: 24 Madeleines, also 2 Backdurchgänge à 12 Stück. Für den zweiten Durchgang die Form abkühlen lassen, bevor sie erneut befüllt wird, um den Temperaturkontrast beizubehalten, der den schönen Buckel begünstigt. Der verwendete Ofen erreicht maximal 200°C, daher ist das Rezept zunächst auf 200°C eingestellt und wird dann auf 180°C reduziert.",
       th:"พิมพ์รูปเปลือกหอย ขนาด 265 × 350 × 28 มม. — มี 12 ช่อง เติมแป้งเสมอขอบ ผลผลิตอ้างอิง: 24 ชิ้น คือ 2 รอบ รอบละ 12 ชิ้น สำหรับรอบที่สอง ให้พักพิมพ์จนเย็นก่อนเติมแป้งใหม่ เพื่อคงความแตกต่างของอุณหภูมิที่ช่วยให้เกิดหลังนูนสวย เตาที่ใช้มีอุณหภูมิสูงสุดไม่เกิน 200°C สูตรนี้จึงตั้งไว้ที่ 200°C ในตอนแรก แล้วลดเหลือ 180°C",
+    },
+    timers:{
+      1:120,  // Repos de la pâte au réfrigérateur (2h minimum, jusqu'à 10h)
+      4:4,    // Première phase de cuisson à 200°C, avant de baisser à 180°C
     },
   },
 
@@ -2366,6 +2394,12 @@ const recipes = {
       en:"Ideal side: steamed potatoes, homemade mashed potatoes, or fresh pasta.",
       de:"Ideale Beilage: Dampfkartoffeln, hausgemachtes Kartoffelpüree oder frische Nudeln.",
       th:"เครื่องเคียงที่เหมาะ: มันฝรั่งนึ่ง มันบดโฮมเมด หรือพาสต้าสด",
+    },
+    timers:{
+      1:5,    // Faire revenir les lardons
+      3:5,    // Faire revenir les légumes
+      6:165,  // Mijoter (2h30 à 3h)
+      7:6,    // Cuisson des champignons
     },
   },
 
@@ -2465,6 +2499,13 @@ const recipes = {
       en:"Veal can be hard to find regularly in Thailand. If it isn't available, a beef version (using meat that's easy to find at Makro) can be made instead.",
       de:"Kalbfleisch ist in Thailand nicht immer regelmäßig erhältlich. Falls nicht verfügbar, kann stattdessen eine Rindfleisch-Version zubereitet werden (mit einem bei Makro leicht erhältlichen Fleischstück).",
       th:"เนื้อลูกวัวอาจหาซื้อได้ยากในประเทศไทย หากหาไม่ได้ สามารถทำเป็นสูตรเนื้อวัวแทนได้ (โดยใช้เนื้อที่หาซื้อง่ายที่ Makro)",
+    },
+    timers:{
+      0:3,    // Blanchir le veau
+      1:105,  // Cuisson du veau (1h30 à 2h)
+      2:6,    // Cuisson des champignons
+      3:6,    // Cuisson de la sauce blanche
+      4:10,   // Mijoter avec la crème
     },
   },
 
@@ -2568,6 +2609,13 @@ const recipes = {
       en:"For Thailand: merguez and ras el hanout are mostly found via Lazada/Shopee or import grocers (Villa Market). Turnip can be replaced with local white radish if needed — see the Inventory tab for detailed substitutes.",
       de:"Für Thailand: Merguez und Ras el Hanout findet man meist über Lazada/Shopee oder Importläden (Villa Market). Rüben können bei Bedarf durch lokalen weißen Rettich ersetzt werden — genaue Ersatzvorschläge siehe Tab „Inventar“.",
       th:"สำหรับประเทศไทย: ไส้กรอกเมอร์เกซและผงราสเอลฮานูตส่วนใหญ่หาซื้อได้ทาง Lazada/Shopee หรือร้านนำเข้า (Villa Market) หัวผักกาดขาวสามารถใช้หัวไชเท้าท้องถิ่นแทนได้หากจำเป็น — ดูสิ่งทดแทนโดยละเอียดในแท็บคลังวัตถุดิบ",
+    },
+    timers:{
+      0:6,    // Faire dorer le poulet
+      1:4,    // Faire suer oignons et épices
+      2:30,   // Mijoter le bouillon
+      3:15,   // Cuisson courgettes et pois chiches
+      5:10,   // Laisser gonfler la semoule
     },
   },
 };
