@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saisie de recette — La Cuisine Française pour les EXPAT !</title>
+<style>
+  :root{
+    --cream:#FAF5EA;
+    --paper:#FFFDF8;
+    --walnut:#3A2A1D;
+    --walnut-soft:#6B5642;
+    --wheat:#C69A48;
+    --rust:#A24A1F;
+    --sage:#5C6B4A;
+    --line:#E7DAC3;
+    --shadow: 0 2px 10px rgba(58,42,29,0.08);
+    --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--cream);
+    color:var(--walnut);
+    font-family:var(--font-body);
+    padding:24px 16px 120px;
+    line-height:1.5;
+  }
+  .wrap{max-width:760px; margin:0 auto;}
+  header{margin-bottom:28px;}
+  header h1{
+    font-family:var(--font-display);
+    font-size:1.7rem;
+    margin:0 0 4px;
+    color:var(--walnut);
+  }
+  header p{margin:0; color:var(--walnut-soft); font-size:0.92rem;}
+
+  .card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:20px 20px 22px;
+    margin-bottom:20px;
+  }
+  .card h2{
+    font-family:var(--font-display);
+    font-size:1.15rem;
+    margin:0 0 4px;
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+  }
+  .card h2 .num{
+    font-family:var(--font-body);
+    font-size:0.75rem;
+    font-weight:700;
+    color:var(--paper);
+    background:var(--rust);
+    border-radius:20px;
+    padding:2px 9px;
+  }
+  .card .hint{color:var(--walnut-soft); font-size:0.85rem; margin:0 0 16px;}
+
+  label{
+    display:block;
+    font-size:0.78rem;
+    font-weight:600;
+    color:var(--walnut-soft);
+    margin:0 0 4px;
+    text-transform:uppercase;
+    letter-spacing:.02em;
+  }
+  input[type=text], input[type=number], textarea, select{
+    width:100%;
+    font-family:var(--font-body);
+    font-size:0.95rem;
+    padding:9px 11px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:#fff;
+    color:var(--walnut);
+  }
+  textarea{resize:vertical; min-height:44px;}
+  input:focus, textarea:focus, select:focus{
+    outline:2px solid var(--wheat);
+    outline-offset:1px;
+  }
+
+  .grid4{display:grid; grid-template-columns:1fr 1fr; gap:10px 14px;}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px 14px;}
+  .field{margin-bottom:12px;}
+  .lang-tag{font-size:0.68rem; color:var(--wheat); font-weight:700; margin-left:4px;}
+
+  .numrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px;}
+
+  .repeat-block{
+    border:1px dashed var(--line);
+    border-radius:10px;
+    padding:14px 14px 6px;
+    margin-bottom:14px;
+    position:relative;
+    background:#FFFEFB;
+  }
+  .repeat-block .rm-btn{
+    position:absolute; top:8px; right:8px;
+    background:none; border:none; color:var(--rust);
+    font-size:1.1rem; cursor:pointer; line-height:1; padding:4px;
+  }
+  .repeat-block .idx-badge{
+    display:inline-block; background:var(--sage); color:#fff;
+    font-size:0.7rem; font-weight:700; border-radius:6px;
+    padding:1px 7px; margin-bottom:10px;
+  }
+
+  .add-btn{
+    background:var(--cream);
+    border:1.5px dashed var(--wheat);
+    color:var(--rust);
+    font-weight:700;
+    font-size:0.88rem;
+    padding:10px 14px;
+    border-radius:9px;
+    cursor:pointer;
+    width:100%;
+  }
+  .add-btn:hover{background:#F2E8D5;}
+
+  .timer-toggle{display:flex; align-items:center; gap:8px; margin:8px 0 4px;}
+  .timer-toggle input{width:auto;}
+  .timer-toggle label{margin:0; text-transform:none; font-weight:600; font-size:0.85rem; color:var(--walnut);}
+  .timer-min{display:none; max-width:140px; margin-top:8px;}
+  .timer-min.show{display:block;}
+
+  .note-box{
+    background:#F5EEDD; border-left:3px solid var(--wheat);
+    padding:10px 12px; border-radius:0 8px 8px 0; font-size:0.85rem; color:var(--walnut-soft);
+    margin-bottom:16px;
+  }
+
+  .bottom-bar{
+    position:fixed; left:0; right:0; bottom:0;
+    background:var(--paper);
+    border-top:1px solid var(--line);
+    padding:14px 16px;
+    display:flex; gap:10px; justify-content:center;
+    box-shadow:0 -2px 10px rgba(58,42,29,0.08);
+  }
+  .btn{
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:0.95rem;
+    padding:12px 22px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+  }
+  .btn-primary{background:var(--rust); color:#fff;}
+  .btn-primary:hover{background:#8C3E19;}
+  .btn-secondary{background:var(--sage); color:#fff;}
+  .btn-secondary:hover{background:#4C5A3C;}
+
+  #output-wrap{display:none; margin-top:6px;}
+  #output-wrap.show{display:block;}
+  #output-wrap h2{font-family:var(--font-display); font-size:1.1rem;}
+  #jsOutput{
+    width:100%; min-height:320px; font-family:'SF Mono', Menlo, Consolas, monospace;
+    font-size:0.78rem; line-height:1.4; padding:14px; border-radius:10px;
+    border:1px solid var(--line); background:#FCFAF3; color:var(--walnut);
+  }
+  .copy-row{display:flex; gap:10px; margin-top:10px;}
+  .copy-row .btn{flex:1;}
+  .toast{
+    position:fixed; bottom:78px; left:50%; transform:translateX(-50%);
+    background:var(--walnut); color:#fff; padding:8px 16px; border-radius:20px;
+    font-size:0.85rem; opacity:0; pointer-events:none; transition:opacity .25s;
+  }
+  .toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🥖 Saisie d'une nouvelle recette</h1>
+    <p>La Cuisine Française pour les EXPAT ! — remplis les champs ci-dessous, puis génère le code à transmettre à Claude pour l'intégration dans l'app.</p>
+  </header>
+
+  <div class="card">
+    <h2><span class="num">1</span>Identité de la recette</h2>
+    <p class="hint">La « clé technique » sert d'identifiant interne (sans accent ni espace, ex. <em>tarte_tatin</em>).</p>
+
+    <div class="field">
+      <label>Clé technique (id)</label>
+      <input type="text" id="rkey" placeholder="ex. tarte_tatin">
+    </div>
+
+    <label style="margin-top:10px;">Titre de la recette</label>
+    <div class="grid4">
+      <input type="text" id="title_fr" placeholder="FR — ex. Tarte Tatin">
+      <input type="text" id="title_en" placeholder="EN">
+      <input type="text" id="title_de" placeholder="DE">
+      <input type="text" id="title_th" placeholder="TH">
+    </div>
+
+    <label style="margin-top:10px;">Tag / sous-titre (ex. « 6 parts », « 1 moule »)</label>
+    <div class="grid4">
+      <input type="text" id="tag_fr" placeholder="FR">
+      <input type="text" id="tag_en" placeholder="EN">
+      <input type="text" id="tag_de" placeholder="DE">
+      <input type="text" id="tag_th" placeholder="TH">
+    </div>
+
+    <label style="margin-top:10px;">Libellé du sélecteur de quantité (ex. « Nombre de parts souhaité »)</label>
+    <div class="grid4">
+      <input type="text" id="unitLabel_fr" placeholder="FR">
+      <input type="text" id="unitLabel_en" placeholder="EN">
+      <input type="text" id="unitLabel_de" placeholder="DE">
+      <input type="text" id="unitLabel_th" placeholder="TH">
+    </div>
+
+    <label style="margin-top:10px;">Quantités ajustables</label>
+    <div class="numrow">
+      <div><label style="text-transform:none;">Valeur de base</label><input type="number" id="baseCount" value="6"></div>
+      <div><label style="text-transform:none;">Min</label><input type="number" id="qmin" value="1"></div>
+      <div><label style="text-transform:none;">Max</label><input type="number" id="qmax" value="24"></div>
+      <div><label style="text-transform:none;">Pas (step)</label><input type="number" id="qstep" value="1"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">2</span>Ingrédients</h2>
+    <p class="hint">Un ingrédient = son nom (4 langues) + la quantité pour la valeur de base + le produit à acheter.</p>
+    <div id="ingredients-list"></div>
+    <button class="add-btn" onclick="addIngredient()">+ Ajouter un ingrédient</button>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">3</span>Étapes de préparation</h2>
+    <p class="hint">Les étapes doivent être dans le même ordre et en même nombre pour les 4 langues. Coche « Minuteur » si l'étape nécessite un chrono (repos, cuisson, fermentation...).</p>
+    <div id="steps-list"></div>
+    <button class="add-btn" onclick="addStep()">+ Ajouter une étape</button>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">4</span>Valeurs nutritionnelles</h2>
+    <p class="hint">kcal, protéines, glucides, sucres, lipides, saturés, fibres — pour 100 g <strong>et</strong> par portion (unité choisie).</p>
+
+    <label>Pour 100 g</label>
+    <div class="numrow" style="grid-template-columns:repeat(4,1fr); margin-bottom:8px;">
+      <div><label style="text-transform:none;">kcal</label><input type="number" id="n100_kcal"></div>
+      <div><label style="text-transform:none;">Protéines (g)</label><input type="number" step="0.1" id="n100_protein"></div>
+      <div><label style="text-transform:none;">Glucides (g)</label><input type="number" step="0.1" id="n100_carbs"></div>
+      <div><label style="text-transform:none;">Sucres (g)</label><input type="number" step="0.1" id="n100_sugars"></div>
+    </div>
+    <div class="numrow" style="grid-template-columns:repeat(3,1fr);">
+      <div><label style="text-transform:none;">Lipides (g)</label><input type="number" step="0.1" id="n100_fat"></div>
+      <div><label style="text-transform:none;">dont Saturés (g)</label><input type="number" step="0.1" id="n100_sat"></div>
+      <div><label style="text-transform:none;">Fibres (g)</label><input type="number" step="0.1" id="n100_fiber"></div>
+    </div>
+
+    <label style="margin-top:16px;">Par portion / unité</label>
+    <div class="numrow" style="grid-template-columns:repeat(4,1fr); margin-bottom:8px;">
+      <div><label style="text-transform:none;">kcal</label><input type="number" id="nU_kcal"></div>
+      <div><label style="text-transform:none;">Protéines (g)</label><input type="number" step="0.1" id="nU_protein"></div>
+      <div><label style="text-transform:none;">Glucides (g)</label><input type="number" step="0.1" id="nU_carbs"></div>
+      <div><label style="text-transform:none;">Sucres (g)</label><input type="number" step="0.1" id="nU_sugars"></div>
+    </div>
+    <div class="numrow" style="grid-template-columns:repeat(3,1fr);">
+      <div><label style="text-transform:none;">Lipides (g)</label><input type="number" step="0.1" id="nU_fat"></div>
+      <div><label style="text-transform:none;">dont Saturés (g)</label><input type="number" step="0.1" id="nU_sat"></div>
+      <div><label style="text-transform:none;">Fibres (g)</label><input type="number" step="0.1" id="nU_fiber"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">5</span>Note / conseil <span style="font-weight:400; font-size:0.75rem; color:var(--walnut-soft);">(facultatif)</span></h2>
+    <div class="grid4">
+      <textarea id="note_fr" placeholder="FR"></textarea>
+      <textarea id="note_en" placeholder="EN"></textarea>
+      <textarea id="note_de" placeholder="DE"></textarea>
+      <textarea id="note_th" placeholder="TH"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">6</span>Photo</h2>
+    <div class="note-box">
+      📸 La photo n'est pas gérée par ce formulaire (elle doit être compressée puis intégrée en base64 lors de l'intégration). Fournis-la séparément à Claude, ou ajoute-la plus tard — le code généré contient un repère <code>PHOTO_A_AJOUTER</code> à cet endroit.
+    </div>
+  </div>
+
+  <div class="card" id="output-wrap">
+    <h2>Code généré</h2>
+    <p class="hint">Copie ce bloc et transmets-le à Claude dans une future session pour l'intégrer à <code>index.html</code> (rappel : l'intégration complète nécessite aussi 3 ajouts de navigation — bouton, navLabels, section — que Claude effectuera).</p>
+    <textarea id="jsOutput" readonly></textarea>
+    <div class="copy-row">
+      <button class="btn btn-secondary" onclick="copyOutput()">📋 Copier le code</button>
+      <button class="btn btn-secondary" onclick="downloadOutput()">⬇️ Télécharger (.txt)</button>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-bar">
+  <button class="btn btn-primary" onclick="generateCode()">✨ Générer le code de la recette</button>
+</div>
+<div class="toast" id="toast">Copié !</div>
+
+<script>
+let ingredientCount = 0;
+let stepCount = 0;
+
+function addIngredient(){
+  ingredientCount++;
+  const id = ingredientCount;
+  const div = document.createElement('div');
+  div.className = 'repeat-block';
+  div.dataset.ingId = id;
+  div.innerHTML = `
+    <button class="rm-btn" onclick="this.parentElement.remove()" title="Supprimer">✕</button>
+    <span class="idx-badge">Ingrédient</span>
+    <label>Nom de l'ingrédient</label>
+    <div class="grid4">
+      <input type="text" class="ing-fr" placeholder="FR">
+      <input type="text" class="ing-en" placeholder="EN">
+      <input type="text" class="ing-de" placeholder="DE">
+      <input type="text" class="ing-th" placeholder="TH">
+    </div>
+    <div class="grid2" style="margin-top:10px;">
+      <div>
+        <label>Quantité (pour la valeur de base)</label>
+        <input type="number" step="any" class="ing-base" placeholder="ex. 250">
+      </div>
+      <div>
+        <label>Unité</label>
+        <select class="ing-unit">
+          <option value="g">g</option>
+          <option value="kg">kg</option>
+          <option value="ml">ml</option>
+          <option value="l">l</option>
+          <option value="pcs">pièce(s)</option>
+          <option value="tsp">c. à café</option>
+          <option value="tbsp">c. à soupe</option>
+          <option value="sprig">brin(s)</option>
+        </select>
+      </div>
+    </div>
+    <label style="margin-top:10px;">Produit à acheter (marque / précision)</label>
+    <div class="grid4">
+      <input type="text" class="ing-prod-fr" placeholder="FR">
+      <input type="text" class="ing-prod-en" placeholder="EN">
+      <input type="text" class="ing-prod-de" placeholder="DE">
+      <input type="text" class="ing-prod-th" placeholder="TH">
+    </div>
+  `;
+  document.getElementById('ingredients-list').appendChild(div);
+}
+
+function addStep(){
+  stepCount++;
+  const id = stepCount;
+  const div = document.createElement('div');
+  div.className = 'repeat-block';
+  div.dataset.stepId = id;
+  div.innerHTML = `
+    <button class="rm-btn" onclick="this.parentElement.remove()" title="Supprimer">✕</button>
+    <span class="idx-badge">Étape</span>
+    <label>Texte de l'étape</label>
+    <div class="grid4">
+      <textarea class="step-fr" placeholder="FR"></textarea>
+      <textarea class="step-en" placeholder="EN"></textarea>
+      <textarea class="step-de" placeholder="DE"></textarea>
+      <textarea class="step-th" placeholder="TH"></textarea>
+    </div>
+    <div class="timer-toggle">
+      <input type="checkbox" class="step-has-timer" onchange="toggleTimerField(this)">
+      <label>⏱ Cette étape a un minuteur</label>
+    </div>
+    <input type="number" class="step-timer-min timer-min" placeholder="Durée en minutes">
+  `;
+  document.getElementById('steps-list').appendChild(div);
+}
+
+function toggleTimerField(checkbox){
+  const field = checkbox.closest('.repeat-block').querySelector('.step-timer-min');
+  field.classList.toggle('show', checkbox.checked);
+}
+
+// Pré-remplir avec 3 ingrédients et 3 étapes pour démarrer
+addIngredient(); addIngredient(); addIngredient();
+addStep(); addStep(); addStep();
+
+function esc(s){
+  return (s || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
+function langObj(prefix, indent){
+  const fr = esc(document.getElementById(prefix+'_fr')?.value);
+  const en = esc(document.getElementById(prefix+'_en')?.value);
+  const de = esc(document.getElementById(prefix+'_de')?.value);
+  const th = esc(document.getElementById(prefix+'_th')?.value);
+  return `{fr:"${fr}", en:"${en}", de:"${de}", th:"${th}"}`;
+}
+
+function generateCode(){
+  const key = document.getElementById('rkey').value.trim() || 'nouvelle_recette';
+
+  const title = langObj('title');
+  const tag = langObj('tag');
+  const unitLabel = langObj('unitLabel');
+  const baseCount = document.getElementById('baseCount').value || 6;
+  const qmin = document.getElementById('qmin').value || 1;
+  const qmax = document.getElementById('qmax').value || 24;
+  const qstep = document.getElementById('qstep').value || 1;
+
+  // Ingrédients
+  let ingredientsCode = '';
+  document.querySelectorAll('#ingredients-list .repeat-block').forEach(block=>{
+    const fr = esc(block.querySelector('.ing-fr').value);
+    const en = esc(block.querySelector('.ing-en').value);
+    const de = esc(block.querySelector('.ing-de').value);
+    const th = esc(block.querySelector('.ing-th').value);
+    const base = block.querySelector('.ing-base').value || 0;
+    const unit = block.querySelector('.ing-unit').value;
+    const pfr = esc(block.querySelector('.ing-prod-fr').value);
+    const pen = esc(block.querySelector('.ing-prod-en').value);
+    const pde = esc(block.querySelector('.ing-prod-de').value);
+    const pth = esc(block.querySelector('.ing-prod-th').value);
+    if(!fr && !en) return;
+    ingredientsCode += `      {fr:"${fr}", en:"${en}", de:"${de}", th:"${th}", base:${base}, unit:"${unit}",\n`;
+    ingredientsCode += `       prod:{fr:"${pfr}", en:"${pen}", de:"${pde}", th:"${pth}"}},\n`;
+  });
+
+  // Étapes + timers
+  const stepsFr = [], stepsEn = [], stepsDe = [], stepsTh = [];
+  const timerLines = [];
+  let stepIdx = 0;
+  document.querySelectorAll('#steps-list .repeat-block').forEach(block=>{
+    const fr = esc(block.querySelector('.step-fr').value);
+    const en = esc(block.querySelector('.step-en').value);
+    const de = esc(block.querySelector('.step-de').value);
+    const th = esc(block.querySelector('.step-th').value);
+    if(!fr && !en) return;
+    stepsFr.push(`        "${fr}",`);
+    stepsEn.push(`        "${en}",`);
+    stepsDe.push(`        "${de}",`);
+    stepsTh.push(`        "${th}",`);
+    const hasTimer = block.querySelector('.step-has-timer').checked;
+    if(hasTimer){
+      const mins = block.querySelector('.step-timer-min').value || 0;
+      const shortLabel = fr.length > 40 ? fr.slice(0,40)+"…" : fr;
+      timerLines.push(`      ${stepIdx}:${mins},  // ${shortLabel}`);
+    }
+    stepIdx++;
+  });
+
+  // Nutrition
+  const n100 = {
+    kcal: document.getElementById('n100_kcal').value || 0,
+    protein: document.getElementById('n100_protein').value || 0,
+    carbs: document.getElementById('n100_carbs').value || 0,
+    sugars: document.getElementById('n100_sugars').value || 0,
+    fat: document.getElementById('n100_fat').value || 0,
+    sat: document.getElementById('n100_sat').value || 0,
+    fiber: document.getElementById('n100_fiber').value || 0,
+  };
+  const nU = {
+    kcal: document.getElementById('nU_kcal').value || 0,
+    protein: document.getElementById('nU_protein').value || 0,
+    carbs: document.getElementById('nU_carbs').value || 0,
+    sugars: document.getElementById('nU_sugars').value || 0,
+    fat: document.getElementById('nU_fat').value || 0,
+    sat: document.getElementById('nU_sat').value || 0,
+    fiber: document.getElementById('nU_fiber').value || 0,
+  };
+
+  const note = langObj('note');
+  const hasNote = document.getElementById('note_fr').value.trim() ||
+                  document.getElementById('note_en').value.trim() ||
+                  document.getElementById('note_de').value.trim() ||
+                  document.getElementById('note_th').value.trim();
+
+  let code = `  ${key}: {\n`;
+  code += `    title:${title},\n`;
+  code += `    tag:${tag},\n`;
+  code += `    unitLabel:${unitLabel},\n`;
+  code += `    baseCount:${baseCount}, min:${qmin}, max:${qmax}, step:${qstep},\n\n`;
+  code += `    nutrition:{\n`;
+  code += `      per100:{kcal:${n100.kcal}, protein:${n100.protein}, carbs:${n100.carbs}, sugars:${n100.sugars}, fat:${n100.fat}, sat:${n100.sat}, fiber:${n100.fiber}},\n`;
+  code += `      perUnit:{kcal:${nU.kcal}, protein:${nU.protein}, carbs:${nU.carbs}, sugars:${nU.sugars}, fat:${nU.fat}, sat:${nU.sat}, fiber:${nU.fiber}},\n`;
+  code += `    },\n`;
+  code += `    photo:"PHOTO_A_AJOUTER", // TODO : remplacer par la photo compressée en base64\n`;
+  code += `    ingredients:[\n`;
+  code += ingredientsCode;
+  code += `    ],\n`;
+  code += `    steps:{\n`;
+  code += `      fr:[\n${stepsFr.join('\n')}\n      ],\n`;
+  code += `      en:[\n${stepsEn.join('\n')}\n      ],\n`;
+  code += `      de:[\n${stepsDe.join('\n')}\n      ],\n`;
+  code += `      th:[\n${stepsTh.join('\n')}\n      ],\n`;
+  code += `    },\n`;
+  if(hasNote){
+    code += `    note:${note},\n`;
+  }
+  if(timerLines.length){
+    code += `    /* index (0-based, hors {head}) -> durée par défaut en minutes */\n`;
+    code += `    timers:{\n${timerLines.join('\n')}\n    },\n`;
+  }
+  code += `  },\n\n`;
+  code += `/* ─── N'oublie pas les 3 ajouts de navigation (Claude s'en chargera à l'intégration) ───\n`;
+  code += ` * 1. Bouton data-panel="${key}" dans la barre de nav\n`;
+  code += ` * 2. Entrée "${key}" dans navLabels (4 langues)\n`;
+  code += ` * 3. <section class="panel" id="panel-${key}"> dans le corps HTML\n`;
+  code += ` */`;
+
+  document.getElementById('jsOutput').value = code;
+  document.getElementById('output-wrap').classList.add('show');
+  document.getElementById('output-wrap').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function copyOutput(){
+  const ta = document.getElementById('jsOutput');
+  ta.select();
+  navigator.clipboard.writeText(ta.value).then(()=>{
+    showToast('Code copié dans le presse-papiers !');
+  }).catch(()=>{
+    document.execCommand('copy');
+    showToast('Code copié !');
+  });
+}
+
+function downloadOutput(){
+  const key = document.getElementById('rkey').value.trim() || 'nouvelle_recette';
+  const blob = new Blob([document.getElementById('jsOutput').value], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `recette_${key}.txt`;
+  a.click();
+  showToast('Fichier téléchargé !');
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>
