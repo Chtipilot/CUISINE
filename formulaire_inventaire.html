@@ -202,6 +202,30 @@
   }
   .photo-zone .filename{font-size:0.78rem; color:var(--walnut-soft); margin-top:2px;}
 
+  .recap-card{background:#F5EEDD; border:1px solid var(--wheat);}
+  .recap-card h2{color:var(--walnut);}
+  .recap-cat{
+    border-bottom:1px solid var(--line);
+  }
+  .recap-cat:last-child{border-bottom:none;}
+  .recap-cat-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 2px; cursor:pointer; user-select:none;
+  }
+  .recap-cat-head .name{
+    font-family:var(--font-display); font-size:0.98rem; color:var(--walnut);
+  }
+  .recap-cat-head .count{
+    font-size:0.72rem; color:var(--walnut-soft); background:var(--paper);
+    border-radius:20px; padding:1px 8px; margin-left:8px;
+  }
+  .recap-cat-head .chev{color:var(--rust); font-size:0.8rem; transition:transform .15s;}
+  .recap-cat.open .recap-cat-head .chev{transform:rotate(90deg);}
+  .recap-cat-items{display:none; padding:0 2px 10px 8px;}
+  .recap-cat.open .recap-cat-items{display:block;}
+  .recap-item{font-size:0.85rem; color:var(--walnut-soft); padding:3px 0;}
+  .recap-item b{color:var(--walnut); font-weight:600;}
+
   .photo-upload{
     border:1.5px dashed var(--wheat);
     border-radius:10px;
@@ -228,6 +252,12 @@
     <h1>🧺 Saisie Matériel / Ingrédients / Astuces</h1>
     <p>La Cuisine Française pour les EXPAT ! — remplis les champs, puis génère le code à transmettre à Claude pour l'intégration dans l'Inventaire.</p>
   </header>
+
+  <div class="card recap-card">
+    <h2>📋 Rappel de l'existant</h2>
+    <p class="hint">Ce qui est déjà dans l'Inventaire (au 29 août 2026) — pour éviter les doublons et rester cohérent. Touche une catégorie pour la déplier.</p>
+    <div id="recapList"></div>
+  </div>
 
   <div class="card">
     <h2><span class="num">1</span>Type d'entrée</h2>
@@ -291,6 +321,58 @@
 <div class="toast" id="toast">Copié !</div>
 
 <script>
+/* Rappel de l'existant — snapshot de l'Inventaire au 29 août 2026 (index.html V01.02.001) */
+const EXISTING_INVENTAIRE = [
+  {cat:"Farine", items:[
+    {p:"T65 Tradition", m:"Grands Moulins de Paris"},
+    {p:"T65 Campaillette Des Champ", m:"Grainfan Bakery"},
+    {p:"Cake Flour (Purple Crown)", m:"Mongkut Muang (Purple Crown)"},
+    {p:"All Purpose Flour", m:"Blue Cherry"},
+  ]},
+  {cat:"Agent levant", items:[
+    {p:"Baking Powder", m:"Best Odour"},
+    {p:"Baking Soda (bicarbonate)", m:"McGarrett"},
+  ]},
+  {cat:"Levure", items:[
+    {p:"Levure SAF Instant", m:"SAF (Lesaffre)"},
+  ]},
+  {cat:"Équipement", items:[
+    {p:"Moules à kouglof individuels", m:"Silicone (couleurs assorties)"},
+    {p:"Four", m:"Worldtech"},
+  ]},
+  {cat:"Ingrédients rares (avec substitut)", items:[
+    {p:"Veau (épaule ou jarret)", m:"Boucherie / Villa Market"},
+    {p:"Vin rouge de Bourgogne", m:"Import (Villa Market, Makro)"},
+    {p:"Vin blanc sec", m:"Import (Villa Market, Makro)"},
+    {p:"Thym frais", m:"Tops Market (rayon herbes occidentales)"},
+    {p:"Champignons de Paris", m:"Makro / Lotus / marchés"},
+    {p:"Merguez", m:"Import (Lazada, Shopee, boucheries spécialisées)"},
+    {p:"Ras el hanout", m:"Import (Lazada, Shopee)"},
+  ]},
+];
+
+function renderRecap(){
+  const root = document.getElementById("recapList");
+  root.innerHTML = EXISTING_INVENTAIRE.map((cat, i)=>{
+    const items = cat.items.map(it=>`<div class="recap-item"><b>${it.p}</b> — ${it.m}</div>`).join("");
+    return `
+      <div class="recap-cat" data-idx="${i}">
+        <div class="recap-cat-head">
+          <span class="name">${cat.cat}</span>
+          <span><span class="count">${cat.items.length}</span> <span class="chev">▶</span></span>
+        </div>
+        <div class="recap-cat-items">${items}</div>
+      </div>
+    `;
+  }).join("");
+  root.querySelectorAll(".recap-cat-head").forEach(head=>{
+    head.addEventListener("click", ()=>{
+      head.closest(".recap-cat").classList.toggle("open");
+    });
+  });
+}
+renderRecap();
+
 let itemCount = 0;
 let entryType = "materiel";
 
