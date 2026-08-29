@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saisie Inventaire — La Cuisine Française pour les EXPAT !</title>
+<style>
+  :root{
+    --cream:#FAF5EA;
+    --paper:#FFFDF8;
+    --walnut:#3A2A1D;
+    --walnut-soft:#6B5642;
+    --wheat:#C69A48;
+    --rust:#A24A1F;
+    --sage:#5C6B4A;
+    --line:#E7DAC3;
+    --shadow: 0 2px 10px rgba(58,42,29,0.08);
+    --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--cream);
+    color:var(--walnut);
+    font-family:var(--font-body);
+    padding:24px 16px 120px;
+    line-height:1.5;
+  }
+  .wrap{max-width:760px; margin:0 auto;}
+  header{margin-bottom:28px;}
+  header h1{
+    font-family:var(--font-display);
+    font-size:1.6rem;
+    margin:0 0 4px;
+    color:var(--walnut);
+  }
+  header p{margin:0; color:var(--walnut-soft); font-size:0.92rem;}
+
+  .card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:20px 20px 22px;
+    margin-bottom:20px;
+  }
+  .card h2{
+    font-family:var(--font-display);
+    font-size:1.15rem;
+    margin:0 0 4px;
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+  }
+  .card h2 .num{
+    font-family:var(--font-body);
+    font-size:0.75rem;
+    font-weight:700;
+    color:var(--paper);
+    background:var(--rust);
+    border-radius:20px;
+    padding:2px 9px;
+  }
+  .card .hint{color:var(--walnut-soft); font-size:0.85rem; margin:0 0 16px;}
+
+  label{
+    display:block;
+    font-size:0.78rem;
+    font-weight:600;
+    color:var(--walnut-soft);
+    margin:0 0 4px;
+    text-transform:uppercase;
+    letter-spacing:.02em;
+  }
+  input[type=text], textarea, select{
+    width:100%;
+    font-family:var(--font-body);
+    font-size:0.95rem;
+    padding:9px 11px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:#fff;
+    color:var(--walnut);
+  }
+  textarea{resize:vertical; min-height:44px;}
+  input:focus, textarea:focus, select:focus{
+    outline:2px solid var(--wheat);
+    outline-offset:1px;
+  }
+
+  .grid4{display:grid; grid-template-columns:1fr 1fr; gap:10px 14px;}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px 14px;}
+  .field{margin-bottom:12px;}
+
+  .type-toggle{display:flex; gap:8px; margin-bottom:16px;}
+  .type-btn{
+    flex:1; padding:12px; border-radius:10px; border:1.5px solid var(--line);
+    background:#fff; color:var(--walnut-soft); font-weight:700; font-size:0.9rem;
+    cursor:pointer; text-align:center;
+  }
+  .type-btn.active{border-color:var(--rust); background:#FBEFE6; color:var(--rust);}
+
+  .item-block{
+    border:1px dashed var(--line);
+    border-radius:10px;
+    padding:14px 14px 6px;
+    margin-bottom:14px;
+    position:relative;
+    background:#FFFEFB;
+  }
+  .item-block .rm-btn{
+    position:absolute; top:8px; right:8px;
+    background:none; border:none; color:var(--rust);
+    font-size:1.1rem; cursor:pointer; line-height:1; padding:4px;
+  }
+  .item-block .idx-badge{
+    display:inline-block; background:var(--sage); color:#fff;
+    font-size:0.7rem; font-weight:700; border-radius:6px;
+    padding:1px 7px; margin-bottom:10px;
+  }
+
+  .optional-toggle{display:flex; align-items:center; gap:8px; margin:10px 0 4px;}
+  .optional-toggle input{width:auto;}
+  .optional-toggle label{margin:0; text-transform:none; font-weight:600; font-size:0.85rem; color:var(--walnut);}
+  .optional-fields{display:none; margin-top:8px;}
+  .optional-fields.show{display:block;}
+
+  .add-btn{
+    background:var(--cream);
+    border:1.5px dashed var(--wheat);
+    color:var(--rust);
+    font-weight:700;
+    font-size:0.88rem;
+    padding:10px 14px;
+    border-radius:9px;
+    cursor:pointer;
+    width:100%;
+  }
+  .add-btn:hover{background:#F2E8D5;}
+
+  .note-box{
+    background:#F5EEDD; border-left:3px solid var(--wheat);
+    padding:10px 12px; border-radius:0 8px 8px 0; font-size:0.85rem; color:var(--walnut-soft);
+    margin-bottom:16px;
+  }
+
+  .bottom-bar{
+    position:fixed; left:0; right:0; bottom:0;
+    background:var(--paper);
+    border-top:1px solid var(--line);
+    padding:14px 16px;
+    display:flex; gap:10px; justify-content:center;
+    box-shadow:0 -2px 10px rgba(58,42,29,0.08);
+  }
+  .btn{
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:0.95rem;
+    padding:12px 22px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+  }
+  .btn-primary{background:var(--rust); color:#fff;}
+  .btn-primary:hover{background:#8C3E19;}
+  .btn-secondary{background:var(--sage); color:#fff;}
+  .btn-secondary:hover{background:#4C5A3C;}
+
+  #output-wrap{display:none; margin-top:6px;}
+  #output-wrap.show{display:block;}
+  #output-wrap h2{font-family:var(--font-display); font-size:1.1rem;}
+  #jsOutput{
+    width:100%; min-height:320px; font-family:'SF Mono', Menlo, Consolas, monospace;
+    font-size:0.78rem; line-height:1.4; padding:14px; border-radius:10px;
+    border:1px solid var(--line); background:#FCFAF3; color:var(--walnut);
+  }
+  .copy-row{display:flex; gap:10px; margin-top:10px;}
+  .copy-row .btn{flex:1;}
+  .toast{
+    position:fixed; bottom:78px; left:50%; transform:translateX(-50%);
+    background:var(--walnut); color:#fff; padding:8px 16px; border-radius:20px;
+    font-size:0.85rem; opacity:0; pointer-events:none; transition:opacity .25s;
+  }
+  .toast.show{opacity:1;}
+
+  .photo-zone{
+    display:flex; align-items:center; gap:12px;
+    border:1.5px dashed var(--line); border-radius:10px;
+    padding:10px 12px; margin-top:4px;
+    background:#fff;
+  }
+  .photo-zone .thumb{
+    width:56px; height:56px; border-radius:8px; object-fit:cover;
+    background:var(--cream); border:1px solid var(--line); flex:none;
+    display:none;
+  }
+  .photo-zone .thumb.show{display:block;}
+  .photo-zone label.file-label{
+    text-transform:none; font-weight:600; font-size:0.85rem;
+    color:var(--rust); margin:0; cursor:pointer;
+  }
+  .photo-zone .filename{font-size:0.78rem; color:var(--walnut-soft); margin-top:2px;}
+
+  .photo-upload{
+    border:1.5px dashed var(--wheat);
+    border-radius:10px;
+    padding:14px;
+    text-align:center;
+    background:var(--cream);
+    cursor:pointer;
+  }
+  .photo-upload input[type=file]{display:none;}
+  .photo-upload .lbl{font-size:0.85rem; color:var(--rust); font-weight:700;}
+  .photo-preview{
+    display:none;
+    max-width:160px; max-height:160px;
+    border-radius:10px;
+    margin:10px auto 0;
+    box-shadow:var(--shadow);
+  }
+  .photo-status{font-size:0.75rem; color:var(--walnut-soft); margin-top:6px; text-transform:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🧺 Saisie Matériel / Ingrédients / Astuces</h1>
+    <p>La Cuisine Française pour les EXPAT ! — remplis les champs, puis génère le code à transmettre à Claude pour l'intégration dans l'Inventaire.</p>
+  </header>
+
+  <div class="card">
+    <h2><span class="num">1</span>Type d'entrée</h2>
+    <p class="hint">Le matériel et les ingrédients utilisent la même structure de données dans l'app — seule la catégorie change.</p>
+    <div class="type-toggle">
+      <button type="button" class="type-btn active" data-type="materiel">🔧 Matériel</button>
+      <button type="button" class="type-btn" data-type="ingredient">🌾 Ingrédient</button>
+    </div>
+
+    <div class="field" id="catField">
+      <label>Catégorie</label>
+      <select id="catSelect">
+        <option value="__new__">+ Nouvelle catégorie…</option>
+        <option value="Équipement">Équipement (matériel)</option>
+        <option value="Farine">Farine</option>
+        <option value="Agent levant">Agent levant</option>
+        <option value="Levure">Levure</option>
+        <option value="Ingrédients rares (avec substitut)">Ingrédients rares (avec substitut)</option>
+      </select>
+    </div>
+    <div class="grid4" id="newCatFields" style="display:none; margin-top:8px;">
+      <input type="text" id="newCat_fr" placeholder="Nouvelle catégorie — FR">
+      <input type="text" id="newCat_en" placeholder="EN">
+      <input type="text" id="newCat_de" placeholder="DE">
+      <input type="text" id="newCat_th" placeholder="TH">
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">2</span>Articles</h2>
+    <p class="hint">Un article = son nom/marque + ses caractéristiques + où l'acheter, son prix et sa photo. Tu peux en ajouter plusieurs dans la même catégorie.</p>
+    <div id="items-list"></div>
+    <button class="add-btn" onclick="addItem()">+ Ajouter un article</button>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">3</span>Trucs &amp; astuces générales</h2>
+    <p class="hint">Facultatif — une astuce libre non liée à un article précis (ex. conseil de conservation, de dosage, d'achat local...). Sera ajoutée en note dans l'Inventaire.</p>
+    <div class="grid4">
+      <textarea id="tip_fr" placeholder="FR"></textarea>
+      <textarea id="tip_en" placeholder="EN"></textarea>
+      <textarea id="tip_de" placeholder="DE"></textarea>
+      <textarea id="tip_th" placeholder="TH"></textarea>
+    </div>
+  </div>
+
+  <div class="card" id="output-wrap">
+    <h2>Code généré</h2>
+    <p class="hint">Copie ce bloc et transmets-le à Claude dans une future session pour l'intégrer à <code>index.html</code>.</p>
+    <textarea id="jsOutput" readonly></textarea>
+    <div class="copy-row">
+      <button class="btn btn-secondary" onclick="copyOutput()">📋 Copier le code</button>
+      <button class="btn btn-secondary" onclick="downloadOutput()">⬇️ Télécharger (.txt)</button>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-bar">
+  <button class="btn btn-primary" onclick="generateCode()">✨ Générer le code</button>
+</div>
+<div class="toast" id="toast">Copié !</div>
+
+<script>
+let itemCount = 0;
+let entryType = "materiel";
+
+document.querySelectorAll(".type-btn").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".type-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    entryType = btn.dataset.type;
+    if(entryType === "materiel"){
+      document.getElementById("catSelect").value = "Équipement";
+    } else {
+      document.getElementById("catSelect").value = "Farine";
+    }
+    toggleNewCatFields();
+  });
+});
+
+document.getElementById("catSelect").addEventListener("change", toggleNewCatFields);
+function toggleNewCatFields(){
+  const isNew = document.getElementById("catSelect").value === "__new__";
+  document.getElementById("newCatFields").style.display = isNew ? "grid" : "none";
+}
+
+function addItem(){
+  itemCount++;
+  const id = itemCount;
+  const div = document.createElement('div');
+  div.className = 'item-block';
+  div.dataset.itemId = id;
+  div.innerHTML = `
+    <button class="rm-btn" onclick="this.parentElement.remove()" title="Supprimer">✕</button>
+    <span class="idx-badge">Article</span>
+
+    <div class="grid2">
+      <div>
+        <label>Produit</label>
+        <input type="text" class="it-p" placeholder="ex. Baking Powder">
+      </div>
+      <div>
+        <label>Marque</label>
+        <input type="text" class="it-m" placeholder="ex. Best Odour">
+      </div>
+    </div>
+
+    <label style="margin-top:10px;">Format / quantité</label>
+    <div class="grid4">
+      <input type="text" class="it-format-fr" placeholder="FR — ex. 30 g">
+      <input type="text" class="it-format-en" placeholder="EN">
+      <input type="text" class="it-format-de" placeholder="DE">
+      <input type="text" class="it-format-th" placeholder="TH">
+    </div>
+
+    <label style="margin-top:10px;">Caractéristiques</label>
+    <div class="grid4">
+      <textarea class="it-carac-fr" placeholder="FR"></textarea>
+      <textarea class="it-carac-en" placeholder="EN"></textarea>
+      <textarea class="it-carac-de" placeholder="DE"></textarea>
+      <textarea class="it-carac-th" placeholder="TH"></textarea>
+    </div>
+
+    <label style="margin-top:10px;">Usage principal</label>
+    <div class="grid4">
+      <textarea class="it-usage-fr" placeholder="FR"></textarea>
+      <textarea class="it-usage-en" placeholder="EN"></textarea>
+      <textarea class="it-usage-de" placeholder="DE"></textarea>
+      <textarea class="it-usage-th" placeholder="TH"></textarea>
+    </div>
+
+    <label style="margin-top:10px;">Autres usages</label>
+    <div class="grid4">
+      <textarea class="it-autres-fr" placeholder="FR (ou —)"></textarea>
+      <textarea class="it-autres-en" placeholder="EN"></textarea>
+      <textarea class="it-autres-de" placeholder="DE"></textarea>
+      <textarea class="it-autres-th" placeholder="TH"></textarea>
+    </div>
+
+    <div class="field" style="margin-top:10px;">
+      <label>🔖 Référence produit</label>
+      <input type="text" class="it-ref" placeholder="ex. Wt-Ov60L_Blk">
+    </div>
+
+    <div class="field">
+      <label>🔗 Lien</label>
+      <input type="text" class="it-link" placeholder="https://...">
+    </div>
+
+    <label style="margin-top:10px;">💰 Prix estimatif</label>
+    <div class="grid4">
+      <input type="text" class="it-prix-fr" placeholder="FR — ex. 2 103,47 ฿">
+      <input type="text" class="it-prix-en" placeholder="EN — ex. 2,103.47 THB">
+      <input type="text" class="it-prix-de" placeholder="DE — ex. 2.103,47 THB">
+      <input type="text" class="it-prix-th" placeholder="TH — ex. 2,103.47 บาท">
+    </div>
+
+    <label style="margin-top:10px;">🛒 Où acheter</label>
+    <div class="grid4">
+      <input type="text" class="it-ou-fr" placeholder="FR — ex. Lazada">
+      <input type="text" class="it-ou-en" placeholder="EN">
+      <input type="text" class="it-ou-de" placeholder="DE">
+      <input type="text" class="it-ou-th" placeholder="TH">
+    </div>
+
+    <label style="margin-top:10px;">ℹ️ Note info</label>
+    <div class="grid4">
+      <textarea class="it-note-fr" placeholder="FR"></textarea>
+      <textarea class="it-note-en" placeholder="EN"></textarea>
+      <textarea class="it-note-de" placeholder="DE"></textarea>
+      <textarea class="it-note-th" placeholder="TH"></textarea>
+    </div>
+
+    <label style="margin-top:10px;">📷 Photo</label>
+    <div class="photo-upload" onclick="this.querySelector('input').click()">
+      <input type="file" accept="image/*" class="it-photo-input" onchange="handlePhoto(this)">
+      <div class="lbl">Touchez pour choisir une photo</div>
+      <div class="photo-status">Facultatif — sera compressée automatiquement</div>
+      <img class="photo-preview">
+    </div>
+
+    <div class="optional-toggle">
+      <input type="checkbox" class="it-has-sub" onchange="toggleOptional(this, '.it-sub-fields')">
+      <label>🔄 Ajouter un substitut si introuvable</label>
+    </div>
+    <div class="optional-fields it-sub-fields grid4">
+      <textarea class="it-sub-fr" placeholder="FR"></textarea>
+      <textarea class="it-sub-en" placeholder="EN"></textarea>
+      <textarea class="it-sub-de" placeholder="DE"></textarea>
+      <textarea class="it-sub-th" placeholder="TH"></textarea>
+    </div>
+
+    <div class="optional-toggle">
+      <input type="checkbox" class="it-has-tip" onchange="toggleOptional(this, '.it-tip-fields')">
+      <label>💡 Ajouter un truc/astuce pour cet article</label>
+    </div>
+    <div class="optional-fields it-tip-fields grid4">
+      <textarea class="it-tip-fr" placeholder="FR"></textarea>
+      <textarea class="it-tip-en" placeholder="EN"></textarea>
+      <textarea class="it-tip-de" placeholder="DE"></textarea>
+      <textarea class="it-tip-th" placeholder="TH"></textarea>
+    </div>
+  `;
+  document.getElementById('items-list').appendChild(div);
+}
+
+function toggleOptional(checkbox, selector){
+  const field = checkbox.closest('.item-block').querySelector(selector);
+  field.classList.toggle('show', checkbox.checked);
+}
+
+function handlePhoto(input){
+  const file = input.files[0];
+  if(!file) return;
+  const block = input.closest('.item-block');
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      const maxDim = 800;
+      let w = img.width, h = img.height;
+      if(w > maxDim || h > maxDim){
+        if(w >= h){ h = Math.round(h * maxDim / w); w = maxDim; }
+        else { w = Math.round(w * maxDim / h); h = maxDim; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+      block.dataset.photoDataUrl = dataUrl;
+      const preview = block.querySelector('.photo-preview');
+      preview.src = dataUrl;
+      preview.style.display = 'block';
+      block.querySelector('.photo-status').textContent =
+        `Compressée (${w}×${h}px, ~${Math.round(dataUrl.length*0.75/1024)} Ko)`;
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+addItem();
+
+function esc(s){
+  return (s || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
+function generateCode(){
+  const catSelect = document.getElementById("catSelect").value;
+  let catCode;
+  if(catSelect === "__new__"){
+    const fr = esc(document.getElementById("newCat_fr").value) || "Nouvelle catégorie";
+    const en = esc(document.getElementById("newCat_en").value);
+    const de = esc(document.getElementById("newCat_de").value);
+    const th = esc(document.getElementById("newCat_th").value);
+    catCode = `{fr:"${fr}", en:"${en}", de:"${de}", th:"${th}"}`;
+  } else {
+    // catégorie existante : on ne connaît que le libellé FR ici,
+    // Claude retrouvera/alignera les traductions déjà présentes dans l'app.
+    catCode = `{fr:"${esc(catSelect)}", en:"", de:"", th:""} /* catégorie existante : Claude alignera avec l'entrée déjà présente dans l'app */`;
+  }
+
+  let itemsCode = '';
+  document.querySelectorAll('#items-list .item-block').forEach(block=>{
+    const p = esc(block.querySelector('.it-p').value);
+    const m = esc(block.querySelector('.it-m').value);
+    if(!p) return;
+
+    const g = (cls) => esc(block.querySelector(cls).value);
+
+    itemsCode += `    {p:"${p}", m:"${m}",\n`;
+    itemsCode += `     format:{fr:"${g('.it-format-fr')}", en:"${g('.it-format-en')}", de:"${g('.it-format-de')}", th:"${g('.it-format-th')}"},\n`;
+    itemsCode += `     carac:{fr:"${g('.it-carac-fr')}", en:"${g('.it-carac-en')}", de:"${g('.it-carac-de')}", th:"${g('.it-carac-th')}"},\n`;
+    itemsCode += `     usage:{fr:"${g('.it-usage-fr')}", en:"${g('.it-usage-en')}", de:"${g('.it-usage-de')}", th:"${g('.it-usage-th')}"},\n`;
+    itemsCode += `     autres:{fr:"${g('.it-autres-fr')}", en:"${g('.it-autres-en')}", de:"${g('.it-autres-de')}", th:"${g('.it-autres-th')}"}`;
+
+    const ref = g('.it-ref');
+    if(ref){
+      itemsCode += `,\n     ref:"${ref}" /* NOTE: nouveau champ, non encore affiché — Claude ajoutera le rendu */`;
+    }
+
+    const link = g('.it-link');
+    if(link){
+      itemsCode += `,\n     lien:"${link}" /* NOTE: nouveau champ, non encore affiché — Claude ajoutera le rendu */`;
+    }
+
+    const hasPrix = g('.it-prix-fr') || g('.it-prix-en') || g('.it-prix-de') || g('.it-prix-th');
+    if(hasPrix){
+      itemsCode += `,\n     prix:{fr:"${g('.it-prix-fr')}", en:"${g('.it-prix-en')}", de:"${g('.it-prix-de')}", th:"${g('.it-prix-th')}"} /* NOTE: nouveau champ, non encore affiché — Claude ajoutera le rendu */`;
+    }
+
+    const hasOu = g('.it-ou-fr') || g('.it-ou-en') || g('.it-ou-de') || g('.it-ou-th');
+    if(hasOu){
+      itemsCode += `,\n     ouAcheter:{fr:"${g('.it-ou-fr')}", en:"${g('.it-ou-en')}", de:"${g('.it-ou-de')}", th:"${g('.it-ou-th')}"} /* NOTE: nouveau champ, non encore affiché — Claude ajoutera le rendu */`;
+    }
+
+    const hasNoteInfo = g('.it-note-fr') || g('.it-note-en') || g('.it-note-de') || g('.it-note-th');
+    if(hasNoteInfo){
+      itemsCode += `,\n     noteInfo:{fr:"${g('.it-note-fr')}", en:"${g('.it-note-en')}", de:"${g('.it-note-de')}", th:"${g('.it-note-th')}"} /* NOTE: nouveau champ, non encore affiché — Claude ajoutera le rendu */`;
+    }
+
+    const photoDataUrl = block.dataset.photoDataUrl;
+    if(photoDataUrl){
+      itemsCode += `,\n     photo:"${photoDataUrl}" /* NOTE: nouveau champ, non encore affiché — Claude ajoutera le rendu */`;
+    }
+
+    const hasSub = block.querySelector('.it-has-sub').checked;
+    const hasTip = block.querySelector('.it-has-tip').checked;
+
+    if(hasSub){
+      itemsCode += `,\n     sub:{fr:"${g('.it-sub-fr')}", en:"${g('.it-sub-en')}", de:"${g('.it-sub-de')}", th:"${g('.it-sub-th')}"}`;
+    }
+    if(hasTip){
+      itemsCode += `,\n     tip:{fr:"${g('.it-tip-fr')}", en:"${g('.it-tip-en')}", de:"${g('.it-tip-de')}", th:"${g('.it-tip-th')}"} /* NOTE: nouveau champ, non encore affiché — Claude ajoutera le rendu */`;
+    }
+    itemsCode += `},\n`;
+  });
+
+  const generalTipFr = document.getElementById("tip_fr").value.trim();
+  const hasGeneralTip = generalTipFr ||
+    document.getElementById("tip_en").value.trim() ||
+    document.getElementById("tip_de").value.trim() ||
+    document.getElementById("tip_th").value.trim();
+
+  let code = `  {cat:${catCode}, items:[\n`;
+  code += itemsCode;
+  code += `  ]},\n`;
+
+  if(hasGeneralTip){
+    code += `\n/* ─── Truc & astuce général (à intégrer où Claude le juge pertinent, ex. note d'Inventaire) ───\n`;
+    code += ` * fr: "${esc(document.getElementById("tip_fr").value)}"\n`;
+    code += ` * en: "${esc(document.getElementById("tip_en").value)}"\n`;
+    code += ` * de: "${esc(document.getElementById("tip_de").value)}"\n`;
+    code += ` * th: "${esc(document.getElementById("tip_th").value)}"\n`;
+    code += ` */`;
+  }
+
+  document.getElementById('jsOutput').value = code;
+  document.getElementById('output-wrap').classList.add('show');
+  document.getElementById('output-wrap').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function copyOutput(){
+  const ta = document.getElementById('jsOutput');
+  ta.select();
+  navigator.clipboard.writeText(ta.value).then(()=>{
+    showToast('Code copié dans le presse-papiers !');
+  }).catch(()=>{
+    document.execCommand('copy');
+    showToast('Code copié !');
+  });
+}
+
+function downloadOutput(){
+  const blob = new Blob([document.getElementById('jsOutput').value], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `inventaire_saisie.txt`;
+  a.click();
+  showToast('Fichier téléchargé !');
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>
