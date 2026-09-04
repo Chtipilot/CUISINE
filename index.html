@@ -1600,7 +1600,13 @@
   //                 l'endroit du départ" restait affiché même une fois le départ déjà marqué (punaise
   //                 déjà visible sur la photo), inutile dans ce cas. Il ne s'affiche désormais que
   //                 si le départ n'est pas encore marqué, ou si le mode "re-marquer" est activé.
-  const APP_VERSION = "SuarPark - V02.000.007";
+  //   V02.000.008 — Correction : l'auto-armement (et donc le grand message centré) n'était déclenché
+  //                 que sur un trou totalement vierge (aucun coup) — si le départ était effacé alors
+  //                 que des coups existaient déjà, rien ne se redéclenchait automatiquement. Corrigé :
+  //                 le mode "pose du départ" s'arme désormais dès que le départ n'est pas marqué,
+  //                 peu importe le nombre de coups déjà enregistrés — sur l'ouverture du trou ET sur
+  //                 la navigation précédent/suivant.
+  const APP_VERSION = "SuarPark - V02.000.008";
 
   const DIST = [485,378,292,111,322,329,502,140,377,355,394,112,440,114,301,532,406,395];
   const DIST_WHITE = [505,403,383,141,380,375,522,165,412,368,414,154,492,141,338,569,422,415];
@@ -6247,11 +6253,13 @@
     if (!Array.isArray(blankCardShotPointsByHole[holeIdx])) blankCardShotPointsByHole[holeIdx] = [];
     holeViewShotPoints = blankCardShotPointsByHole[holeIdx];
     holeViewInfoExpanded = false;
-    // Trou vierge (ni coup cliqué, ni départ marqué) : arme automatiquement le mode "pose du
-    // départ" — évite d'avoir à presser le petit bouton en plus, dès l'ouverture de la vue.
+    // Départ pas encore marqué (que des coups existent déjà ou non) : arme automatiquement le mode
+    // "pose du départ" — évite d'avoir à presser le petit bouton en plus, dès l'ouverture de la
+    // vue. Se redéclenche aussi si le départ a été effacé entre-temps (pas seulement sur un trou
+    // totalement vierge).
     const teeAlready = (blankCardTeeGeoByHole || [])[holeIdx];
     const teeAlreadySet = teeAlready && teeAlready.x !== undefined;
-    holeViewTeeArmed = holeViewShotPoints.length === 0 && !teeAlreadySet;
+    holeViewTeeArmed = !teeAlreadySet;
     renderHoleView(holeIdx);
   }
 
@@ -6270,8 +6278,8 @@
     document.getElementById('btnHoleViewBack').addEventListener('click', closeHoleView);
     const prevBtn = document.getElementById('btnHoleViewPrev');
     const nextBtn = document.getElementById('btnHoleViewNext');
-    if (prevBtn) prevBtn.addEventListener('click', () => { holeViewTeeArmed = false; if (!Array.isArray(blankCardShotPointsByHole[holeIdx-1])) blankCardShotPointsByHole[holeIdx-1] = []; holeViewShotPoints = blankCardShotPointsByHole[holeIdx-1]; renderHoleView(holeIdx - 1); });
-    if (nextBtn) nextBtn.addEventListener('click', () => { holeViewTeeArmed = false; if (!Array.isArray(blankCardShotPointsByHole[holeIdx+1])) blankCardShotPointsByHole[holeIdx+1] = []; holeViewShotPoints = blankCardShotPointsByHole[holeIdx+1]; renderHoleView(holeIdx + 1); });
+    if (prevBtn) prevBtn.addEventListener('click', () => { const t2 = (blankCardTeeGeoByHole||[])[holeIdx-1]; holeViewTeeArmed = !(t2 && t2.x !== undefined); if (!Array.isArray(blankCardShotPointsByHole[holeIdx-1])) blankCardShotPointsByHole[holeIdx-1] = []; holeViewShotPoints = blankCardShotPointsByHole[holeIdx-1]; renderHoleView(holeIdx - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', () => { const t2 = (blankCardTeeGeoByHole||[])[holeIdx+1]; holeViewTeeArmed = !(t2 && t2.x !== undefined); if (!Array.isArray(blankCardShotPointsByHole[holeIdx+1])) blankCardShotPointsByHole[holeIdx+1] = []; holeViewShotPoints = blankCardShotPointsByHole[holeIdx+1]; renderHoleView(holeIdx + 1); });
 
     // Précharge l'image pour connaître ses dimensions naturelles : nécessaire pour convertir un clic
     // en coordonnées relatives à la PHOTO (et non à l'écran entier), puisqu'avec background-size:
