@@ -1596,7 +1596,11 @@
   //   V02.000.006 — Retiré le petit texte "Touche la photo à l'endroit du départ..." sous le bouton,
   //                 devenu redondant avec le grand message centré ajouté en V02.000.005. Le bouton
   //                 lui-même reste (utile pour re-marquer le départ plus tard si besoin).
-  const APP_VERSION = "SuarPark - V02.000.006";
+  //   V02.000.007 — Correction (capture d'écran à l'appui) : le bouton "📍 Clique sur la carte à
+  //                 l'endroit du départ" restait affiché même une fois le départ déjà marqué (punaise
+  //                 déjà visible sur la photo), inutile dans ce cas. Il ne s'affiche désormais que
+  //                 si le départ n'est pas encore marqué, ou si le mode "re-marquer" est activé.
+  const APP_VERSION = "SuarPark - V02.000.007";
 
   const DIST = [485,378,292,111,322,329,502,140,377,355,394,112,440,114,301,532,406,395];
   const DIST_WHITE = [505,403,383,141,380,375,522,165,412,368,414,154,492,141,338,569,422,415];
@@ -6083,6 +6087,7 @@
     const bgImg = HOLE_MAP_IMG[holeIdx];
     const penalty = holeHasPenalty(holeIdx);
     const greenReached = !!blankCardGreenReachedByHole[holeIdx];
+    const teeIsSet = !!((blankCardTeeGeoByHole || [])[holeIdx] && (blankCardTeeGeoByHole || [])[holeIdx].x !== undefined);
     const currentPutts = document.getElementById(`bcPutt-${holeIdx}`) ? document.getElementById(`bcPutt-${holeIdx}`).value : '';
     // Mise en page en colonne flex : bandeau haut (hauteur auto) / zone photo (occupe tout
     // l'espace restant) / bandeau bas (hauteur auto). La photo n'est donc JAMAIS recouverte par
@@ -6147,9 +6152,9 @@
             </div>
             <p id="holeViewShotsHint" style="pointer-events:none; font-size:10.5px; opacity:.85; text-align:center; margin:6px 0 0; color:#fff; display:${(holeViewShotPoints.length===0 && !greenReached) ? 'block':'none'};">${t('holeViewNoShots')}</p>
             ${holeViewGeoSummaryHTML(holeIdx)}
-            <div style="text-align:center; margin-top:4px;">
+            ${(!teeIsSet || holeViewTeeArmed) ? `<div style="text-align:center; margin-top:4px;">
               <button type="button" id="btnHoleViewRecaptureTee" class="btn ${holeViewTeeArmed ? '' : 'btn-secondary'} no-print" style="font-size:10.5px; padding:4px 10px; margin:0; ${holeViewTeeArmed ? 'background:#dc3545; color:#fff;' : ''}">${t('holeViewBtnRecaptureTee')}</button>
-            </div>
+            </div>` : ''}
           </div>
         </div>
 
