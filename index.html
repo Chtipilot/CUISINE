@@ -1593,7 +1593,10 @@
   //                 (3) Vérifié : le 1er clic pose toujours le départ en priorité (même logique
   //                 qu'avant, juste automatique désormais), donc la distance du 1er coup depuis le
   //                 départ reste fiable dans ce flux simplifié.
-  const APP_VERSION = "SuarPark - V02.000.005";
+  //   V02.000.006 — Retiré le petit texte "Touche la photo à l'endroit du départ..." sous le bouton,
+  //                 devenu redondant avec le grand message centré ajouté en V02.000.005. Le bouton
+  //                 lui-même reste (utile pour re-marquer le départ plus tard si besoin).
+  const APP_VERSION = "SuarPark - V02.000.006";
 
   const DIST = [485,378,292,111,322,329,502,140,377,355,394,112,440,114,301,532,406,395];
   const DIST_WHITE = [505,403,383,141,380,375,522,165,412,368,414,154,492,141,338,569,422,415];
@@ -6146,7 +6149,6 @@
             ${holeViewGeoSummaryHTML(holeIdx)}
             <div style="text-align:center; margin-top:4px;">
               <button type="button" id="btnHoleViewRecaptureTee" class="btn ${holeViewTeeArmed ? '' : 'btn-secondary'} no-print" style="font-size:10.5px; padding:4px 10px; margin:0; ${holeViewTeeArmed ? 'background:#dc3545; color:#fff;' : ''}">${t('holeViewBtnRecaptureTee')}</button>
-              ${holeViewTeeArmed ? `<p style="pointer-events:none; font-size:10.5px; color:#fff; opacity:.9; margin:4px 0 0;">📍 ${t('holeViewTeeArmedHint')}</p>` : ''}
             </div>
           </div>
         </div>
