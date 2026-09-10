@@ -1110,7 +1110,6 @@
     <svg width="26" height="26" viewBox="0 0 24 24"><defs><clippath id="flagClip"><rect x="1" y="4" width="22" height="16" rx="2"></rect></clippath></defs><g clip-path="url(#flagClip)"><rect x="1" y="4" width="22" height="16" fill="#fff"></rect><rect x="1" y="4" width="7.34" height="16" fill="#0055A4"></rect><rect x="15.66" y="4" width="7.34" height="16" fill="#EF4135"></rect></g><rect x="1" y="4" width="22" height="16" rx="2" fill="none" stroke="#C69A48" stroke-width="1"></rect></svg>
     <div>
       <h1 id="pageTitle">La Cuisine Française pour les EXPAT !</h1>
-      <p class="sub" id="pageSub">Tous les achats sont locaux : exemple en Thaïlande Makro, Lotus, Lazada, Shopee... et marchés classiques. BON APPÉTIT !!</p>
     </div>
     <span class="version-badge" id="versionBadge">V01.04.001 · 4 septembre 2026</span>
   </div>
@@ -1653,9 +1652,10 @@ const UNITS = {
 };
 
 /* ===================== VERSION ===================== */
-const APP_VERSION = "01.04.005";
+const APP_VERSION = "01.04.006";
 const APP_VERSION_DATE = "10 septembre 2026";
 const CHANGELOG = [
+  { version:"01.04.006", date:"10 septembre 2026", note:"Retrait du texte « Tous les achats sont locaux... » de la page de garde (header, visible partout) ; déplacé dans l'onglet ℹ️ À propos, juste après l'introduction." },
   { version:"01.04.005", date:"10 septembre 2026", note:"Barre de navigation du bas allégée : suppression de tous les raccourcis directs vers les recettes (Baguette, Congolais, Gâteau Banane, Gâteau Coco, Kouglof, Madeleines, Blanquette, Bourguignon, Couscous). Elle ne comporte plus que À propos, Inventaire, Courses, Recettes et Thaïlande. Toutes les recettes restent accessibles via 📖 Recettes > catégorie (Pain, Gâteau, Autre)." },
   { version:"01.04.004", date:"10 septembre 2026", note:"Barre de navigation du bas : suppression des raccourcis directs vers PAIN mixte et Pain au Lait (elles restent accessibles via 📖 Recettes > Pain, aux côtés de la Baguette)." },
   { version:"01.04.003", date:"10 septembre 2026", note:"PAIN mixte : l'eau est désormais ajoutée en une seule fois (160 g) pour l'autolyse, au lieu d'un découpage en deux temps. Ajout de la recette dans la catégorie « Pain » de la page d'accueil, aux côtés de la Baguette et du Pain au Lait." },
@@ -3285,6 +3285,7 @@ function renderAbout(){
     <h2 class="recipe-hero">ℹ️ ${UI.navLabels.apropos[lang]}</h2>
     <div class="note key">${UI.aboutLangReminder[lang]}</div>
     <p class="recipe-tag">${UI.aboutFreeSite[lang]}</p>
+    <p class="recipe-tag">${UI.appSubtitle[lang]}</p>
 
     <div class="about-quotes">${quotes}</div>
 
@@ -4234,7 +4235,6 @@ coursesLoadCurrent();
 function refreshStaticText(){
   const lang = currentLang;
   document.getElementById("pageTitle").textContent = UI.appTitle[lang];
-  document.getElementById("pageSub").textContent = UI.appSubtitle[lang];
   document.getElementById("modalTitle").textContent = UI.modalTitle[lang];
   const invHero = document.getElementById("invHero");
   if(invHero) invHero.textContent = "🧺 " + UI.navLabels.inventaire[lang];
