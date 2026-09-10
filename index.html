@@ -1652,9 +1652,12 @@ const UNITS = {
 };
 
 /* ===================== VERSION ===================== */
-const APP_VERSION = "01.04.010";
+const APP_VERSION = "01.04.013";
 const APP_VERSION_DATE = "10 septembre 2026";
 const CHANGELOG = [
+  { version:"01.04.013", date:"10 septembre 2026", note:"PAIN mixte : durée du pétrissage précisée à 20 minutes (au lieu de « 15 à 30 minutes »), cohérente avec le chrono déjà en place sur cette étape." },
+  { version:"01.04.012", date:"10 septembre 2026", note:"PAIN mixte : correction — le chrono de 20 min est placé directement sur l'étape 3 (Pétrir), sans ajouter d'étape supplémentaire." },
+  { version:"01.04.011", date:"10 septembre 2026", note:"PAIN mixte : ajout d'un repos de 20 minutes après le pétrissage (point 3), avant de former la boule." },
   { version:"01.04.010", date:"10 septembre 2026", note:"PAIN mixte : retrait du préchauffage de la section « 4 — Sortie du réfrigérateur » ; la détente finale en section 5 passe à 1-2h (retour à température ambiante et bon volume de la baguette), avec le préchauffage du four déplacé sur les 25-30 dernières minutes de cette attente." },
   { version:"01.04.009", date:"10 septembre 2026", note:"PAIN mixte : ajout de la section « 5 — Façonnage » après la sortie du réfrigérateur (le pâton sort en boule, il est façonné en baguette à ce moment-là, avec 15-20 min de détente finale avant les grignes), au lieu d'être façonné avant la fermentation lente." },
   { version:"01.04.008", date:"10 septembre 2026", note:"PAIN mixte : ajout d'une première fermentation en masse (2 rabats à 45 min d'intervalle, ~1h30 au total, autour de 30-31°C) entre le pétrissage et la fermentation lente au réfrigérateur. Chrono de 20 min déplacé sur l'étape d'autolyse. Fermentation au réfrigérateur élargie à 10-20h. La suite de la recette (sortie du frigo, grignes, cuisson, refroidissement) reste inchangée." },
@@ -2313,7 +2316,7 @@ const recipes = {
         {head:"1 — Pétrissage"},
         "Mélanger les farines avec les 160 g d'eau et laisser reposer 20 minutes (autolyse).",
         "Ajouter la levure et le sel.",
-        "Pétrir jusqu'à obtenir une pâte souple, homogène et légèrement collante (environ 15 à 30 minutes).",
+        "Pétrir jusqu'à obtenir une pâte souple, homogène et légèrement collante (environ 20 minutes).",
         "Former une boule.",
         {head:"2 — Première fermentation en masse (environ 1h30, autour de 30-31°C)"},
         "Faire un premier rabat après environ 45 minutes.",
@@ -2345,7 +2348,7 @@ const recipes = {
         {head:"1 — Kneading"},
         "Mix the flours with the 160 g of water and let rest for 20 minutes (autolyse).",
         "Add the yeast and salt.",
-        "Knead until you get a soft, smooth, slightly sticky dough (about 15 to 30 minutes).",
+        "Knead until you get a soft, smooth, slightly sticky dough (about 20 minutes).",
         "Shape into a ball.",
         {head:"2 — First bulk fermentation (about 1h30, around 30-31°C)"},
         "Do a first fold after about 45 minutes.",
@@ -2377,7 +2380,7 @@ const recipes = {
         {head:"1 — Kneten"},
         "Die Mehle mit den 160 g Wasser vermischen und 20 Minuten ruhen lassen (Autolyse).",
         "Die Hefe und das Salz zugeben.",
-        "Kneten, bis ein weicher, homogener, leicht klebriger Teig entsteht (etwa 15 bis 30 Minuten).",
+        "Kneten, bis ein weicher, homogener, leicht klebriger Teig entsteht (etwa 20 Minuten).",
         "Zu einer Kugel formen.",
         {head:"2 — Erste Stockgare (etwa 1:30 Std., bei ca. 30-31°C)"},
         "Nach etwa 45 Minuten das erste Mal falten (Dehnen und Falten).",
@@ -2409,7 +2412,7 @@ const recipes = {
         {head:"1 — การนวดแป้ง"},
         "ผสมแป้งทั้งสองชนิดกับน้ำ 160 กรัมทั้งหมด แล้วพักไว้ 20 นาที (ขั้นตอนออโตไลส์)",
         "ใส่ยีสต์และเกลือ",
-        "นวดจนได้แป้งที่นุ่ม เนียน และเหนียวเล็กน้อย (ประมาณ 15 ถึง 30 นาที)",
+        "นวดจนได้แป้งที่นุ่ม เนียน และเหนียวเล็กน้อย (ประมาณ 20 นาที)",
         "ขึ้นรูปเป็นก้อนกลม",
         {head:"2 — การหมักแป้งก้อนใหญ่ครั้งแรก (ประมาณ 1 ชั่วโมง 30 นาที ที่ 30-31°C)"},
         "พับแป้งครั้งแรกหลังจากผ่านไปประมาณ 45 นาที",
@@ -2442,6 +2445,7 @@ const recipes = {
     /* index (0-based, hors {head}) -> durée par défaut en minutes */
     timers:{
       0:20,   // Autolyse
+      2:20,   // Pétrissage
       4:45,   // 1er rabat (attente)
       5:45,   // 2e rabat (attente)
       8:900,  // Fermentation lente au réfrigérateur (~15h, entre 10 et 20h)
