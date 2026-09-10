@@ -1652,9 +1652,10 @@ const UNITS = {
 };
 
 /* ===================== VERSION ===================== */
-const APP_VERSION = "01.04.006";
+const APP_VERSION = "01.04.007";
 const APP_VERSION_DATE = "10 septembre 2026";
 const CHANGELOG = [
+  { version:"01.04.007", date:"10 septembre 2026", note:"PAIN mixte : la farine tout usage référence désormais le produit effectivement en Inventaire, All Purpose Flour (Blue Cherry), au lieu de « Non listée »." },
   { version:"01.04.006", date:"10 septembre 2026", note:"Retrait du texte « Tous les achats sont locaux... » de la page de garde (header, visible partout) ; déplacé dans l'onglet ℹ️ À propos, juste après l'introduction." },
   { version:"01.04.005", date:"10 septembre 2026", note:"Barre de navigation du bas allégée : suppression de tous les raccourcis directs vers les recettes (Baguette, Congolais, Gâteau Banane, Gâteau Coco, Kouglof, Madeleines, Blanquette, Bourguignon, Couscous). Elle ne comporte plus que À propos, Inventaire, Courses, Recettes et Thaïlande. Toutes les recettes restent accessibles via 📖 Recettes > catégorie (Pain, Gâteau, Autre)." },
   { version:"01.04.004", date:"10 septembre 2026", note:"Barre de navigation du bas : suppression des raccourcis directs vers PAIN mixte et Pain au Lait (elles restent accessibles via 📖 Recettes > Pain, aux côtés de la Baguette)." },
@@ -2270,7 +2271,7 @@ const recipes = {
       {fr:"Farine Campaillette T65", en:"T65 Campaillette flour", de:"Mehl T65 Campaillette", th:"แป้ง T65 Campaillette", base:125, unit:"g",
        prod:{fr:"T65 Campaillette (Des Champs)", en:"T65 Campaillette (Des Champs)", de:"T65 Campaillette (Des Champs)", th:"T65 Campaillette (Des Champs)"}},
       {fr:"Farine tout usage", en:"All-purpose flour", de:"Weizenmehl (Allzweck)", th:"แป้งอเนกประสงค์", base:125, unit:"g",
-       prod:{fr:"Non listée", en:"Not listed", de:"Nicht gelistet", th:"ไม่มีในรายการ"}},
+       prod:{fr:"All Purpose Flour (Blue Cherry)", en:"All Purpose Flour (Blue Cherry)", de:"All Purpose Flour (Blue Cherry)", th:"All Purpose Flour (Blue Cherry)"}},
       {fr:"Eau", en:"Water", de:"Wasser", th:"น้ำ", base:160, unit:"g",
        prod:{fr:"Non listée", en:"Not listed", de:"Nicht gelistet", th:"ไม่มีในรายการ"}},
       {fr:"Sel fin", en:"Fine salt", de:"Feines Salz", th:"เกลือป่น", base:5, unit:"g",
