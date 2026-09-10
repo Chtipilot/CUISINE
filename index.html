@@ -1381,9 +1381,9 @@ const UI = {
   accueilCategories:{
     pain:{
       label:{fr:"Pain", en:"Bread", de:"Brot", th:"ขนมปัง"},
-      desc:{fr:"Baguette, Pain au Lait", en:"Baguette, Milk Bread", de:"Baguette, Milchbrötchen", th:"บาแกตต์, ขนมปังนม"},
+      desc:{fr:"Baguette, PAIN mixte, Pain au Lait", en:"Baguette, Mixed Bread, Milk Bread", de:"Baguette, Mischbrot, Milchbrötchen", th:"บาแกตต์, ขนมปังผสม, ขนมปังนม"},
       icon:"🥖",
-      recipes:["baguette","pain_au_lait_raisin"],
+      recipes:["baguette","pain","pain_au_lait_raisin"],
     },
     gateau:{
       label:{fr:"Gâteau", en:"Cake", de:"Kuchen", th:"เค้ก"},
@@ -1664,9 +1664,10 @@ const UNITS = {
 };
 
 /* ===================== VERSION ===================== */
-const APP_VERSION = "01.04.002";
+const APP_VERSION = "01.04.003";
 const APP_VERSION_DATE = "10 septembre 2026";
 const CHANGELOG = [
+  { version:"01.04.003", date:"10 septembre 2026", note:"PAIN mixte : l'eau est désormais ajoutée en une seule fois (160 g) pour l'autolyse, au lieu d'un découpage en deux temps. Ajout de la recette dans la catégorie « Pain » de la page d'accueil, aux côtés de la Baguette et du Pain au Lait." },
   { version:"01.04.002", date:"10 septembre 2026", note:"PAIN mixte : ajout de la photo du produit fini (belle croûte dorée, grignes bien ouvertes)." },
   { version:"01.04.001", date:"4 septembre 2026", note:"Nouvelle recette : PAIN mixte (T65 Campaillette + farine tout usage). Protocole dérivé de la Baguette Signature, sans première fermentation en masse, cuisson vapeur intégralement à 250°C (12 min) puis 220°C (10-15 min)." },
   { version:"01.03.006", date:"30 août 2026", note:"Baguette Signature : ajout de la T65 Campaillette (Des Champs) comme alternative sous la T65 Tradition (Grands Moulins de Paris) dans la liste d'ingrédients." },
@@ -2315,8 +2316,8 @@ const recipes = {
     steps:{
       fr:[
         {head:"1 — Pétrissage"},
-        "Mélanger les farines avec 150 g d'eau et laisser reposer 20 minutes (autolyse).",
-        "Ajouter les 10 g d'eau restants, puis la levure et le sel.",
+        "Mélanger les farines avec les 160 g d'eau et laisser reposer 20 minutes (autolyse).",
+        "Ajouter la levure et le sel.",
         "Pétrir jusqu'à obtenir une pâte souple, homogène et légèrement collante (environ 15 à 30 minutes).",
         "Former une boule.",
         {head:"2 — Division et façonnage"},
@@ -2344,8 +2345,8 @@ const recipes = {
       ],
       en:[
         {head:"1 — Kneading"},
-        "Mix the flours with 150 g of water and let rest for 20 minutes (autolyse).",
-        "Add the remaining 10 g of water, then the yeast and salt.",
+        "Mix the flours with the 160 g of water and let rest for 20 minutes (autolyse).",
+        "Add the yeast and salt.",
         "Knead until you get a soft, smooth, slightly sticky dough (about 15 to 30 minutes).",
         "Shape into a ball.",
         {head:"2 — Dividing and shaping"},
@@ -2373,8 +2374,8 @@ const recipes = {
       ],
       de:[
         {head:"1 — Kneten"},
-        "Die Mehle mit 150 g Wasser vermischen und 20 Minuten ruhen lassen (Autolyse).",
-        "Die restlichen 10 g Wasser zugeben, dann Hefe und Salz.",
+        "Die Mehle mit den 160 g Wasser vermischen und 20 Minuten ruhen lassen (Autolyse).",
+        "Die Hefe und das Salz zugeben.",
         "Kneten, bis ein weicher, homogener, leicht klebriger Teig entsteht (etwa 15 bis 30 Minuten).",
         "Zu einer Kugel formen.",
         {head:"2 — Teilen und Formen"},
@@ -2402,8 +2403,8 @@ const recipes = {
       ],
       th:[
         {head:"1 — การนวดแป้ง"},
-        "ผสมแป้งทั้งสองชนิดกับน้ำ 150 กรัม แล้วพักไว้ 20 นาที (ขั้นตอนออโตไลส์)",
-        "ใส่น้ำที่เหลืออีก 10 กรัม ตามด้วยยีสต์และเกลือ",
+        "ผสมแป้งทั้งสองชนิดกับน้ำ 160 กรัมทั้งหมด แล้วพักไว้ 20 นาที (ขั้นตอนออโตไลส์)",
+        "ใส่ยีสต์และเกลือ",
         "นวดจนได้แป้งที่นุ่ม เนียน และเหนียวเล็กน้อย (ประมาณ 15 ถึง 30 นาที)",
         "ขึ้นรูปเป็นก้อนกลม",
         {head:"2 — การแบ่งและขึ้นรูป"},
