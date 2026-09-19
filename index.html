@@ -1272,6 +1272,7 @@
   <section class="panel" id="panel-couscous"></section>
   <section class="panel" id="panel-gateau_banane"></section>
   <section class="panel" id="panel-gateau_coco"></section>
+  <section class="panel" id="panel-gateau_raisins"></section>
   <section class="panel" id="panel-thailande"></section>
   <section class="panel" id="panel-apropos"></section>
 
@@ -1357,6 +1358,7 @@ const UI = {
     couscous:{fr:"Couscous", en:"Couscous", de:"Couscous", th:"คูสคูส"},
     gateau_banane:{fr:"Gâteau Banane", en:"Banana Cake", de:"Bananenkuchen", th:"เค้กกล้วย"},
     gateau_coco:{fr:"Gâteau Coco", en:"Coconut Cake", de:"Kokoskuchen", th:"เค้กมะพร้าว"},
+    gateau_raisins:{fr:"Gâteau Raisins", en:"Raisin Cake", de:"Rosinenkuchen", th:"เค้กลูกเกด"},
     thailande:{fr:"Thaïlande", en:"Thailand", de:"Thailand", th:"ไทย"},
     apropos:{fr:"À propos", en:"About", de:"Über uns", th:"เกี่ยวกับเรา"},
   },
@@ -1375,9 +1377,9 @@ const UI = {
     },
     gateau:{
       label:{fr:"Gâteau", en:"Cake", de:"Kuchen", th:"เค้ก"},
-      desc:{fr:"Congolais, Gâteau Banane, Gâteau Coco, Kouglof, Madeleines", en:"Congolais, Banana Cake, Coconut Cake, Kouglof, Madeleines", de:"Congolais, Bananenkuchen, Kokoskuchen, Kouglof, Madeleines", th:"คองโกเล่ต์, เค้กกล้วย, เค้กมะพร้าว, คูโกลฟ, มาเดอลีน"},
+      desc:{fr:"Congolais, Gâteau Banane, Gâteau Coco, Gâteau Raisins, Kouglof, Madeleines", en:"Congolais, Banana Cake, Coconut Cake, Raisin Cake, Kouglof, Madeleines", de:"Congolais, Bananenkuchen, Kokoskuchen, Rosinenkuchen, Kouglof, Madeleines", th:"คองโกเล่ต์, เค้กกล้วย, เค้กมะพร้าว, เค้กลูกเกด, คูโกลฟ, มาเดอลีน"},
       icon:"🎂",
-      recipes:["congolais","gateau_banane","gateau_coco","kouglof","madeleines"],
+      recipes:["congolais","gateau_banane","gateau_coco","gateau_raisins","kouglof","madeleines"],
     },
     autre:{
       label:{fr:"Autre", en:"Other", de:"Andere", th:"อื่น ๆ"},
@@ -1652,9 +1654,11 @@ const UNITS = {
 };
 
 /* ===================== VERSION ===================== */
-const APP_VERSION = "01.04.013";
-const APP_VERSION_DATE = "10 septembre 2026";
+const APP_VERSION = "01.05.001";
+const APP_VERSION_DATE = "19 septembre 2026";
 const CHANGELOG = [
+  { version:"01.05.001", date:"19 septembre 2026", note:"Gâteau aux Raisins : correction de la levure chimique, ramenée à 8 g (au lieu de 30 g), avec la nutrition recalculée en conséquence." },
+  { version:"01.05.000", date:"19 septembre 2026", note:"Nouvelle recette : Gâteau aux Raisins (catégorie Gâteau). Raisins secs trempés dans l'eau tiède, pâte simple œufs/sucre/beurre/lait, cuisson 35 min à 170°C. Photo à ajouter ultérieurement." },
   { version:"01.04.013", date:"10 septembre 2026", note:"PAIN mixte : durée du pétrissage précisée à 20 minutes (au lieu de « 15 à 30 minutes »), cohérente avec le chrono déjà en place sur cette étape." },
   { version:"01.04.012", date:"10 septembre 2026", note:"PAIN mixte : correction — le chrono de 20 min est placé directement sur l'étape 3 (Pétrir), sans ajouter d'étape supplémentaire." },
   { version:"01.04.011", date:"10 septembre 2026", note:"PAIN mixte : ajout d'un repos de 20 minutes après le pétrissage (point 3), avant de former la boule." },
@@ -3205,6 +3209,88 @@ const recipes = {
       3:5,   // Ajouter la farine, la levure chimique, la vanille…
       4:5,   // Laisser reposer la pâte
       6:15,  // Cuire à 175°C
+    },
+  },
+
+  gateau_raisins: {
+    title:{fr:"Gâteau aux Raisins", en:"Raisin Cake", de:"Rosinenkuchen", th:"เค้กลูกเกด"},
+    tag:{fr:"6 parts", en:"6 servings", de:"6 Portionen", th:"6 ส่วน"},
+    unitLabel:{fr:"Nombre de parts souhaité", en:"Number of servings desired", de:"Gewünschte Anzahl Portionen", th:"จำนวนส่วนที่ต้องการ"},
+    baseCount:6, min:1, max:24, step:1,
+
+    nutrition:{
+      per100:{kcal:323, protein:6.1, carbs:49.4, sugars:24.4, fat:11.7, sat:6.6, fiber:1.4},
+      perUnit:{kcal:478, protein:9.0, carbs:73.1, sugars:36.1, fat:17.3, sat:9.8, fiber:2.1},
+    },
+
+    photo:"PHOTO_A_AJOUTER", // TODO : remplacer par la photo compressée en base64
+
+    ingredients:[
+      {fr:"Farine", en:"Flour", de:"Mehl", th:"แป้ง", base:250, unit:"g",
+       prod:{fr:"ALL PURPOSE", en:"ALL PURPOSE", de:"ALL PURPOSE", th:"ALL PURPOSE"}},
+      {fr:"Raisins secs", en:"Raisins", de:"Rosinen", th:"ลูกเกด", base:150, unit:"g",
+       prod:{fr:"", en:"", de:"", th:""}},
+      {fr:"Sucre", en:"Sugar", de:"Zucker", th:"น้ำตาล", base:120, unit:"g",
+       prod:{fr:"", en:"", de:"", th:""}},
+      {fr:"Beurre fondu", en:"Melted butter", de:"Geschmolzene Butter", th:"เนยละลาย", base:100, unit:"g",
+       prod:{fr:"", en:"", de:"", th:""}},
+      {fr:"Œufs", en:"Eggs", de:"Eier", th:"ไข่", base:3, unit:"pcs",
+       prod:{fr:"", en:"", de:"", th:""}},
+      {fr:"Lait", en:"Milk", de:"Milch", th:"นม", base:100, unit:"ml",
+       prod:{fr:"", en:"", de:"", th:""}},
+      {fr:"Levure chimique", en:"Baking powder", de:"Backpulver", th:"ผงฟู", base:8, unit:"g",
+       prod:{fr:"BAKING POWDER", en:"BAKING POWDER", de:"BAKING POWDER", th:"BAKING POWDER"}},
+      {fr:"Sel", en:"Salt", de:"Salz", th:"เกลือ", base:1, unit:"tsp",
+       prod:{fr:"", en:"", de:"", th:""}},
+      {fr:"Vanille", en:"Vanilla", de:"Vanille", th:"วานิลลา", base:1, unit:"tsp",
+       prod:{fr:"", en:"", de:"", th:""}},
+    ],
+    steps:{
+      fr:[
+        "Faire tremper les raisins dans de l'eau tiède puis les égoutter",
+        "Préchauffer le four à 170°",
+        "Fouetter les œufs avec le sucre",
+        "Ajouter le beurre fondu puis le lait",
+        "Incorporer la farine, la levure et le sel.",
+        "Ajouter les raisins et mélanger",
+        "Verser dans un moule beurré",
+        "Cuire 35mn à 170°",
+      ],
+      en:[
+        "Soak the raisins in warm water, then drain them",
+        "Preheat the oven to 170°C",
+        "Whisk the eggs with the sugar",
+        "Add the melted butter, then the milk",
+        "Fold in the flour, baking powder and salt.",
+        "Add the raisins and mix",
+        "Pour into a buttered mold",
+        "Bake for 35 min at 170°C",
+      ],
+      de:[
+        "Die Rosinen in warmem Wasser einweichen, dann abtropfen lassen",
+        "Den Ofen auf 170°C vorheizen",
+        "Die Eier mit dem Zucker verquirlen",
+        "Die geschmolzene Butter, dann die Milch hinzufügen",
+        "Das Mehl, das Backpulver und das Salz unterheben.",
+        "Die Rosinen hinzufügen und vermischen",
+        "In eine gebutterte Form füllen",
+        "35 Minuten bei 170°C backen",
+      ],
+      th:[
+        "แช่ลูกเกดในน้ำอุ่นแล้วสะเด็ดน้ำ",
+        "อุ่นเตาอบที่ 170°C",
+        "ตีไข่กับน้ำตาล",
+        "ใส่เนยละลาย แล้วตามด้วยนม",
+        "ใส่แป้ง ผงฟู และเกลือ คนให้เข้ากัน",
+        "ใส่ลูกเกดแล้วคนให้เข้ากัน",
+        "เทใส่พิมพ์ที่ทาเนยไว้",
+        "อบ 35 นาทีที่ 170°C",
+      ],
+    },
+    /* index (0-based, hors {head}) -> durée par défaut en minutes */
+    timers:{
+      0:15,  // Faire tremper les raisins dans de l'eau …
+      7:35,  // Cuire 35mn à 170°
     },
   },
 };
