@@ -82,16 +82,32 @@
   }
   .lang-toggle button{
     flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:3px;
     border:none;
     background:transparent;
     color:#D9C9A8;
     font-family:var(--font-body);
-    font-size:12.5px;
+    padding:6px 0;
+    border-radius:14px;
+    cursor:pointer;
+  }
+  .lang-toggle button .flag-icon{
+    width:20px;
+    height:13px;
+    border-radius:2px;
+    overflow:hidden;
+    display:block;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,0.25);
+  }
+  .lang-toggle button .code{
+    font-size:10px;
     font-weight:700;
     letter-spacing:0.4px;
-    padding:7px 0;
-    border-radius:999px;
-    cursor:pointer;
+    line-height:1;
   }
   .lang-toggle button.active{
     background:var(--wheat);
@@ -1114,10 +1130,22 @@
     <span class="version-badge" id="versionBadge">V01.04.001 · 4 septembre 2026</span>
   </div>
   <div class="lang-toggle" id="langToggle">
-    <button data-lang="fr" class="active">FR</button>
-    <button data-lang="en">EN</button>
-    <button data-lang="de">DE</button>
-    <button data-lang="th">TH</button>
+    <button data-lang="fr" class="active" title="Français" aria-label="Français">
+      <svg class="flag-icon" viewBox="0 0 60 40" aria-hidden="true"><rect width="20" height="40" fill="#0055A4"/><rect x="20" width="20" height="40" fill="#fff"/><rect x="40" width="20" height="40" fill="#EF4135"/></svg>
+      <span class="code">FR</span>
+    </button>
+    <button data-lang="en" title="English" aria-label="English">
+      <svg class="flag-icon" viewBox="0 0 60 40" aria-hidden="true"><rect width="60" height="40" fill="#00247D"/><line x1="0" y1="0" x2="60" y2="40" stroke="#fff" stroke-width="14"/><line x1="60" y1="0" x2="0" y2="40" stroke="#fff" stroke-width="14"/><line x1="0" y1="0" x2="60" y2="40" stroke="#CF142B" stroke-width="6"/><line x1="60" y1="0" x2="0" y2="40" stroke="#CF142B" stroke-width="6"/><rect x="0" y="14" width="60" height="12" fill="#fff"/><rect x="22" y="0" width="16" height="40" fill="#fff"/><rect x="0" y="17" width="60" height="6" fill="#CF142B"/><rect x="26" y="0" width="8" height="40" fill="#CF142B"/></svg>
+      <span class="code">GB</span>
+    </button>
+    <button data-lang="de" title="Deutsch" aria-label="Deutsch">
+      <svg class="flag-icon" viewBox="0 0 60 40" aria-hidden="true"><rect width="60" height="13.33" y="0" fill="#000"/><rect width="60" height="13.33" y="13.33" fill="#DD0000"/><rect width="60" height="13.34" y="26.66" fill="#FFCE00"/></svg>
+      <span class="code">DE</span>
+    </button>
+    <button data-lang="th" title="ภาษาไทย" aria-label="ภาษาไทย">
+      <svg class="flag-icon" viewBox="0 0 60 40" aria-hidden="true"><rect width="60" height="40" fill="#A51931"/><rect y="6.667" width="60" height="26.667" fill="#fff"/><rect y="13.333" width="60" height="13.333" fill="#2D2A4A"/></svg>
+      <span class="code">TH</span>
+    </button>
   </div>
 </header>
 
@@ -1513,10 +1541,10 @@ const UI = {
 
   /* ===== Onglet "À propos" ===== */
   aboutLangReminder:{
-    fr:"🌐 Vous préférez une autre langue ? Les boutons FR / EN / DE / TH sont toujours accessibles en haut de la page !",
-    en:"🌐 Prefer another language? The FR / EN / DE / TH buttons are always available at the top of the page!",
-    de:"🌐 Lieber eine andere Sprache? Die Schaltflächen FR / EN / DE / TH sind oben auf der Seite jederzeit verfügbar!",
-    th:"🌐 ต้องการเปลี่ยนภาษา? ปุ่ม FR / EN / DE / TH อยู่ด้านบนของหน้าเว็บตลอดเวลา!",
+    fr:"🌐 Vous préférez une autre langue ? Les drapeaux FR / GB / DE / TH sont toujours accessibles en haut de la page !",
+    en:"🌐 Prefer another language? The FR / GB / DE / TH flags are always available at the top of the page!",
+    de:"🌐 Lieber eine andere Sprache? Die Flaggen FR / GB / DE / TH sind oben auf der Seite jederzeit verfügbar!",
+    th:"🌐 ต้องการเปลี่ยนภาษา? ธง FR / GB / DE / TH อยู่ด้านบนของหน้าเว็บตลอดเวลา!",
   },
   aboutFreeSite:{
     fr:"Ce site multi-langue est gratuit, sans cookie, sans publicité aujourd'hui. Merci de venir le visiter.",
