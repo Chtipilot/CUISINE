@@ -1684,9 +1684,10 @@ const UNITS = {
 };
 
 /* ===================== VERSION ===================== */
-const APP_VERSION = "01.06.000";
+const APP_VERSION = "01.06.001";
 const APP_VERSION_DATE = "26 septembre 2026";
 const CHANGELOG = [
+  { version:"01.06.001", date:"26 septembre 2026", note:"Muffins anglais : ajout de l'alternative au lait frais — 20 g de lait en poudre entier + 145 ml d'eau tiède (quantités ajustables avec le nombre de muffins), étape 1 et note complétées." },
   { version:"01.06.000", date:"26 septembre 2026", note:"Nouvelle recette : Muffins anglais (pain anglais), catégorie Pain. Pâte levée lait/beurre, levée 1h30-2h, découpe à l'emporte-pièce, enrobage de semoule, cuisson à la poêle 2 × 5 min, sans four. 8 muffins d'environ 60 g, nutrition calculée. Les recettes sans photo n'affichent plus d'image cassée. Photo à ajouter ultérieurement." },
   { version:"01.05.002", date:"19 septembre 2026", note:"Gâteau aux Raisins : ajout de « BAKING POWDER » comme référence produit pour la levure chimique." },
   { version:"01.05.001", date:"19 septembre 2026", note:"Gâteau aux Raisins : correction de la levure chimique, ramenée à 8 g (au lieu de 30 g), avec la nutrition recalculée en conséquence." },
@@ -2720,6 +2721,10 @@ const recipes = {
        prod:{fr:"Blue Cherry All Purpose Flour", en:"Blue Cherry All Purpose Flour", de:"Blue Cherry All Purpose Flour", th:"Blue Cherry All Purpose Flour"}},
       {fr:"Lait tiède", en:"Warm milk", de:"Lauwarme Milch", th:"นมอุ่น", base:160, unit:"ml",
        prod:{fr:"Non listé — à ajouter", en:"Not listed — to buy", de:"Nicht gelistet — zu besorgen", th:"ยังไม่มีในคลัง — ต้องซื้อเพิ่ม"}},
+      {fr:"OU, sans lait frais : lait en poudre entier", en:"OR, without fresh milk: whole milk powder", de:"ODER, ohne frische Milch: Vollmilchpulver", th:"หรือ หากไม่มีนมสด: นมผงครบส่วน", base:20, unit:"g",
+       prod:{fr:"Non listé — à ajouter", en:"Not listed — to buy", de:"Nicht gelistet — zu besorgen", th:"ยังไม่มีในคลัง — ต้องซื้อเพิ่ม"}},
+      {fr:"+ eau tiède (avec le lait en poudre)", en:"+ warm water (with the milk powder)", de:"+ lauwarmes Wasser (zum Milchpulver)", th:"+ น้ำอุ่น (ใช้คู่กับนมผง)", base:145, unit:"ml",
+       prod:{fr:"Non listé — à ajouter", en:"Not listed — to buy", de:"Nicht gelistet — zu besorgen", th:"ยังไม่มีในคลัง — ต้องซื้อเพิ่ม"}},
       {fr:"Levure de boulanger déshydratée", en:"Dried baker's yeast", de:"Trockenhefe", th:"ยีสต์แห้ง", base:7, unit:"g",
        prod:{fr:"Levure SAF Instant", en:"Instant SAF yeast", de:"Instanthefe SAF", th:"ยีสต์สำเร็จรูป SAF"}},
       {fr:"Sucre en poudre", en:"Granulated sugar", de:"Zucker", th:"น้ำตาลทรายละเอียด", base:1, unit:"tsp",
@@ -2760,7 +2765,7 @@ const recipes = {
     steps:{
       fr:[
         {head:"1 — Pétrissage"},
-        "Mélanger le lait tiède (environ 35°C, pas plus chaud), la levure et le sucre.",
+        "Mélanger le lait tiède (environ 35°C, pas plus chaud), la levure et le sucre. Avec du lait en poudre : le dissoudre d'abord dans l'eau tiède, en fouettant jusqu'à ce qu'il n'y ait plus de grumeaux, puis ajouter la levure et le sucre.",
         "Ajouter la farine, le sel et le beurre mou, puis pétrir environ 10 minutes pour former une pâte souple, lisse et légèrement collante.",
         {head:"2 — Levée"},
         "Former une boule, la déposer dans un saladier couvert d'un torchon ou de film alimentaire, et laisser lever 1h30 à 2h, jusqu'à ce que la pâte double de volume.",
@@ -2777,7 +2782,7 @@ const recipes = {
       ],
       en:[
         {head:"1 — Kneading"},
-        "Mix the warm milk (about 35°C, no hotter), the yeast and the sugar.",
+        "Mix the warm milk (about 35°C, no hotter), the yeast and the sugar. With milk powder: first dissolve it in the warm water, whisking until there are no lumps, then add the yeast and sugar.",
         "Add the flour, salt and soft butter, then knead for about 10 minutes to form a soft, smooth, slightly sticky dough.",
         {head:"2 — Rising"},
         "Shape into a ball, place it in a bowl covered with a tea towel or cling film, and leave to rise for 1h30 to 2h, until the dough has doubled in size.",
@@ -2794,7 +2799,7 @@ const recipes = {
       ],
       de:[
         {head:"1 — Kneten"},
-        "Die lauwarme Milch (etwa 35°C, nicht wärmer), die Hefe und den Zucker vermischen.",
+        "Die lauwarme Milch (etwa 35°C, nicht wärmer), die Hefe und den Zucker vermischen. Mit Milchpulver: dieses zuerst im lauwarmen Wasser auflösen und klümpchenfrei verquirlen, dann Hefe und Zucker hinzufügen.",
         "Mehl, Salz und weiche Butter hinzufügen und etwa 10 Minuten zu einem weichen, glatten, leicht klebrigen Teig kneten.",
         {head:"2 — Gehen lassen"},
         "Zu einer Kugel formen, in eine mit einem Tuch oder Frischhaltefolie abgedeckte Schüssel legen und 1,5 bis 2 Stunden gehen lassen, bis sich das Volumen verdoppelt hat.",
@@ -2811,7 +2816,7 @@ const recipes = {
       ],
       th:[
         {head:"1 — นวดแป้ง"},
-        "ผสมนมอุ่น (ประมาณ 35°C ไม่ร้อนกว่านี้) ยีสต์ และน้ำตาลเข้าด้วยกัน",
+        "ผสมนมอุ่น (ประมาณ 35°C ไม่ร้อนกว่านี้) ยีสต์ และน้ำตาลเข้าด้วยกัน หากใช้นมผง ให้ละลายนมผงในน้ำอุ่นก่อน ตีจนไม่มีก้อน แล้วจึงใส่ยีสต์และน้ำตาล",
         "ใส่แป้ง เกลือ และเนยนิ่ม แล้วนวดประมาณ 10 นาที จนได้แป้งที่นุ่ม เนียน และเหนียวมือเล็กน้อย",
         {head:"2 — พักให้แป้งขึ้น"},
         "ปั้นแป้งเป็นก้อนกลม ใส่ชามแล้วคลุมด้วยผ้าหรือฟิล์มถนอมอาหาร พักไว้ 1 ชั่วโมง 30 นาทีถึง 2 ชั่วโมง จนแป้งขึ้นฟูเป็นสองเท่า",
@@ -2828,10 +2833,10 @@ const recipes = {
       ],
     },
     note:{
-      fr:"En Thaïlande, la chaleur accélère la levée : vérifier la pâte dès 1h. Le lait ne doit pas dépasser 35-40°C, sinon la levure est détruite. Si les muffins semblent un peu denses, laisser reposer les cercles découpés 20 minutes sous un torchon avant la cuisson. Garder le feu doux-moyen : trop fort, l'extérieur brûle avant que le cœur soit cuit.",
-      en:"In Thailand, the heat speeds up the rise, so check the dough from 1 hour. The milk must not go above 35-40°C, or it will kill the yeast. If the muffins turn out a little dense, let the cut rounds rest for 20 minutes under a tea towel before cooking. Keep the heat low-medium: too high and the outside burns before the inside is cooked.",
-      de:"In Thailand beschleunigt die Wärme das Aufgehen, daher den Teig schon nach 1 Stunde prüfen. Die Milch darf nicht wärmer als 35-40°C sein, sonst stirbt die Hefe ab. Falls die Muffins etwas kompakt geraten, die ausgestochenen Kreise vor dem Backen 20 Minuten unter einem Tuch ruhen lassen. Die Hitze niedrig bis mittel halten: Ist sie zu hoch, verbrennt die Außenseite, bevor das Innere gar ist.",
-      th:"ในประเทศไทย อากาศร้อนทำให้แป้งขึ้นเร็วขึ้น ควรเริ่มตรวจแป้งตั้งแต่ 1 ชั่วโมง นมต้องไม่ร้อนเกิน 35-40°C มิฉะนั้นยีสต์จะตาย หากมัฟฟินแน่นเกินไป ให้พักแป้งที่กดพิมพ์แล้วใต้ผ้า 20 นาทีก่อนนำไปอบ ควรใช้ไฟอ่อนถึงปานกลาง หากไฟแรงเกินไป ด้านนอกจะไหม้ก่อนที่ด้านในจะสุก",
+      fr:"Lait en poudre : utiliser soit le lait tiède, soit le lait en poudre + l'eau tiède, jamais les deux. Environ 20 g de poudre pour 145 ml d'eau remplacent 160 ml de lait. Si le paquet indique un autre dosage, suivre le paquet. La nutrition reste pratiquement la même avec du lait entier en poudre. En Thaïlande, la chaleur accélère la levée : vérifier la pâte dès 1h. Le lait ne doit pas dépasser 35-40°C, sinon la levure est détruite. Si les muffins semblent un peu denses, laisser reposer les cercles découpés 20 minutes sous un torchon avant la cuisson. Garder le feu doux-moyen : trop fort, l'extérieur brûle avant que le cœur soit cuit.",
+      en:"Milk powder: use either the warm milk or the milk powder + warm water, never both. About 20 g of powder in 145 ml of water replaces 160 ml of milk. If the packet gives a different ratio, follow the packet. Nutrition stays practically the same with whole milk powder. In Thailand, the heat speeds up the rise, so check the dough from 1 hour. The milk must not go above 35-40°C, or it will kill the yeast. If the muffins turn out a little dense, let the cut rounds rest for 20 minutes under a tea towel before cooking. Keep the heat low-medium: too high and the outside burns before the inside is cooked.",
+      de:"Milchpulver: entweder die lauwarme Milch oder Milchpulver + lauwarmes Wasser verwenden, niemals beides. Etwa 20 g Pulver in 145 ml Wasser ersetzen 160 ml Milch. Gibt die Packung ein anderes Verhältnis an, der Packung folgen. Mit Vollmilchpulver bleiben die Nährwerte praktisch gleich. In Thailand beschleunigt die Wärme das Aufgehen, daher den Teig schon nach 1 Stunde prüfen. Die Milch darf nicht wärmer als 35-40°C sein, sonst stirbt die Hefe ab. Falls die Muffins etwas kompakt geraten, die ausgestochenen Kreise vor dem Backen 20 Minuten unter einem Tuch ruhen lassen. Die Hitze niedrig bis mittel halten: Ist sie zu hoch, verbrennt die Außenseite, bevor das Innere gar ist.",
+      th:"นมผง: ใช้นมอุ่น หรือนมผง + น้ำอุ่น อย่างใดอย่างหนึ่งเท่านั้น ห้ามใช้ทั้งสองอย่าง นมผงประมาณ 20 กรัมละลายในน้ำ 145 มล. ใช้แทนนมสด 160 มล. ได้ หากบนซองระบุอัตราส่วนต่างออกไป ให้ทำตามซอง คุณค่าทางโภชนาการแทบไม่เปลี่ยนเมื่อใช้นมผงครบส่วน ในประเทศไทย อากาศร้อนทำให้แป้งขึ้นเร็วขึ้น ควรเริ่มตรวจแป้งตั้งแต่ 1 ชั่วโมง นมต้องไม่ร้อนเกิน 35-40°C มิฉะนั้นยีสต์จะตาย หากมัฟฟินแน่นเกินไป ให้พักแป้งที่กดพิมพ์แล้วใต้ผ้า 20 นาทีก่อนนำไปอบ ควรใช้ไฟอ่อนถึงปานกลาง หากไฟแรงเกินไป ด้านนอกจะไหม้ก่อนที่ด้านในจะสุก",
     },
     /* index (0-based, hors {head}) -> durée par défaut en minutes */
     timers:{
