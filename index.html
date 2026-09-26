@@ -1294,6 +1294,7 @@
   <section class="panel" id="panel-kouglof"></section>
   <section class="panel" id="panel-congolais"></section>
   <section class="panel" id="panel-pain_au_lait_raisin"></section>
+  <section class="panel" id="panel-muffins_anglais"></section>
   <section class="panel" id="panel-madeleines"></section>
   <section class="panel" id="panel-bourguignon"></section>
   <section class="panel" id="panel-blanquette"></section>
@@ -1380,6 +1381,7 @@ const UI = {
     baguette:{fr:"Baguette", en:"Baguette", de:"Baguette", th:"บาแกตต์"},
     pain:{fr:"PAIN mixte", en:"Mixed Bread", de:"Mischbrot", th:"ขนมปังผสม"},
     pain_au_lait_raisin:{fr:"Pain au Lait", en:"Milk Bread", de:"Milchbrötchen", th:"ขนมปังนม"},
+    muffins_anglais:{fr:"Muffins anglais", en:"English Muffins", de:"Englische Muffins", th:"อิงลิชมัฟฟิน"},
     madeleines:{fr:"Madeleines", en:"Madeleines", de:"Madeleines", th:"มาเดอลีน"},
     bourguignon:{fr:"Bourguignon", en:"Bourguignon", de:"Bourguignon", th:"เนื้อตุ๋นไวน์แดง"},
     blanquette:{fr:"Blanquette", en:"Blanquette", de:"Blanquette", th:"บลองเก็ต"},
@@ -1399,9 +1401,9 @@ const UI = {
   accueilCategories:{
     pain:{
       label:{fr:"Pain", en:"Bread", de:"Brot", th:"ขนมปัง"},
-      desc:{fr:"Baguette, PAIN mixte, Pain au Lait", en:"Baguette, Mixed Bread, Milk Bread", de:"Baguette, Mischbrot, Milchbrötchen", th:"บาแกตต์, ขนมปังผสม, ขนมปังนม"},
+      desc:{fr:"Baguette, PAIN mixte, Pain au Lait, Muffins anglais", en:"Baguette, Mixed Bread, Milk Bread, English Muffins", de:"Baguette, Mischbrot, Milchbrötchen, Englische Muffins", th:"บาแกตต์, ขนมปังผสม, ขนมปังนม, อิงลิชมัฟฟิน"},
       icon:"🥖",
-      recipes:["baguette","pain","pain_au_lait_raisin"],
+      recipes:["baguette","pain","pain_au_lait_raisin","muffins_anglais"],
     },
     gateau:{
       label:{fr:"Gâteau", en:"Cake", de:"Kuchen", th:"เค้ก"},
@@ -1682,9 +1684,10 @@ const UNITS = {
 };
 
 /* ===================== VERSION ===================== */
-const APP_VERSION = "01.05.002";
-const APP_VERSION_DATE = "19 septembre 2026";
+const APP_VERSION = "01.06.000";
+const APP_VERSION_DATE = "26 septembre 2026";
 const CHANGELOG = [
+  { version:"01.06.000", date:"26 septembre 2026", note:"Nouvelle recette : Muffins anglais (pain anglais), catégorie Pain. Pâte levée lait/beurre, levée 1h30-2h, découpe à l'emporte-pièce, enrobage de semoule, cuisson à la poêle 2 × 5 min, sans four. 8 muffins d'environ 60 g, nutrition calculée. Les recettes sans photo n'affichent plus d'image cassée. Photo à ajouter ultérieurement." },
   { version:"01.05.002", date:"19 septembre 2026", note:"Gâteau aux Raisins : ajout de « BAKING POWDER » comme référence produit pour la levure chimique." },
   { version:"01.05.001", date:"19 septembre 2026", note:"Gâteau aux Raisins : correction de la levure chimique, ramenée à 8 g (au lieu de 30 g), avec la nutrition recalculée en conséquence." },
   { version:"01.05.000", date:"19 septembre 2026", note:"Nouvelle recette : Gâteau aux Raisins (catégorie Gâteau). Raisins secs trempés dans l'eau tiède, pâte simple œufs/sucre/beurre/lait, cuisson 35 min à 170°C. Photo à ajouter ultérieurement." },
@@ -2696,6 +2699,146 @@ const recipes = {
       21:32,  // Cuisson
       23:5,   // Attente avant démoulage
       24:30,  // Refroidissement avant de couper
+    },
+  },
+
+  muffins_anglais: {
+    title:{fr:"Muffins anglais (pain anglais)", en:"English Muffins", de:"Englische Muffins", th:"อิงลิชมัฟฟิน"},
+    tag:{fr:"8 muffins, ~60 g chacun — cuisson à la poêle, sans four", en:"8 muffins, ~60 g each — pan-cooked, no oven", de:"8 Muffins, je ~60 g — in der Pfanne gebacken, ohne Ofen", th:"มัฟฟิน 8 ชิ้น ชิ้นละประมาณ 60 กรัม — ทอดในกระทะ ไม่ใช้เตาอบ"},
+    unitLabel:{fr:"Nombre de muffins souhaité", en:"Number of muffins desired", de:"Gewünschte Anzahl Muffins", th:"จำนวนมัฟฟินที่ต้องการ"},
+    baseCount:8, min:1, max:48, step:1,
+
+    nutrition:{
+      per100:{kcal:289, protein:7.5, carbs:45.2, sugars:2.6, fat:8.4, sat:5.0, fiber:1.9},
+      perUnit:{kcal:176, protein:4.6, carbs:27.5, sugars:1.6, fat:5.1, sat:3.0, fiber:1.2},
+    },
+
+    photo:"PHOTO_A_AJOUTER", // TODO : remplacer par la photo compressée en base64
+
+    ingredients:[
+      {fr:"Farine tout usage", en:"All-purpose flour", de:"Allzweckmehl", th:"แป้งอเนกประสงค์", base:250, unit:"g",
+       prod:{fr:"Blue Cherry All Purpose Flour", en:"Blue Cherry All Purpose Flour", de:"Blue Cherry All Purpose Flour", th:"Blue Cherry All Purpose Flour"}},
+      {fr:"Lait tiède", en:"Warm milk", de:"Lauwarme Milch", th:"นมอุ่น", base:160, unit:"ml",
+       prod:{fr:"Non listé — à ajouter", en:"Not listed — to buy", de:"Nicht gelistet — zu besorgen", th:"ยังไม่มีในคลัง — ต้องซื้อเพิ่ม"}},
+      {fr:"Levure de boulanger déshydratée", en:"Dried baker's yeast", de:"Trockenhefe", th:"ยีสต์แห้ง", base:7, unit:"g",
+       prod:{fr:"Levure SAF Instant", en:"Instant SAF yeast", de:"Instanthefe SAF", th:"ยีสต์สำเร็จรูป SAF"}},
+      {fr:"Sucre en poudre", en:"Granulated sugar", de:"Zucker", th:"น้ำตาลทรายละเอียด", base:1, unit:"tsp",
+       prod:{fr:"Non listé — à ajouter", en:"Not listed — to buy", de:"Nicht gelistet — zu besorgen", th:"ยังไม่มีในคลัง — ต้องซื้อเพิ่ม"}},
+      {fr:"Beurre mou", en:"Soft butter", de:"Weiche Butter", th:"เนยนิ่ม", base:40, unit:"g",
+       prod:{fr:"Non listé — à ajouter", en:"Not listed — to buy", de:"Nicht gelistet — zu besorgen", th:"ยังไม่มีในคลัง — ต้องซื้อเพิ่ม"}},
+      {fr:"Sel fin (une pincée)", en:"Fine salt (a pinch)", de:"Feines Salz (eine Prise)", th:"เกลือป่น (หนึ่งหยิบมือ)", base:1, unit:"g",
+       prod:{fr:"Non listé — à ajouter", en:"Not listed — to buy", de:"Nicht gelistet — zu besorgen", th:"ยังไม่มีในคลัง — ต้องซื้อเพิ่ม"}},
+      {fr:"Semoule fine (enrobage)", en:"Fine semolina (for coating)", de:"Feiner Grieß (zum Wälzen)", th:"เซโมลินาละเอียด (สำหรับคลุก)", base:20, unit:"g",
+       prod:{fr:"Non listée — à ajouter", en:"Not listed — to buy", de:"Nicht gelistet — zu besorgen", th:"ยังไม่มีในคลัง — ต้องซื้อเพิ่ม"}},
+    ],
+    equipment:{
+      fr:[
+        "Rouleau à pâtisserie.",
+        "Emporte-pièce rond d'environ 8 cm (ou un verre retourné).",
+        "Grande poêle antiadhésive avec couvercle.",
+        "Grille pour le refroidissement.",
+      ],
+      en:[
+        "Rolling pin.",
+        "Round cutter about 8 cm across (or an upturned glass).",
+        "Large non-stick frying pan with a lid.",
+        "Wire rack for cooling.",
+      ],
+      de:[
+        "Nudelholz.",
+        "Runder Ausstecher mit etwa 8 cm Durchmesser (oder ein umgedrehtes Glas).",
+        "Große beschichtete Pfanne mit Deckel.",
+        "Kuchengitter zum Abkühlen.",
+      ],
+      th:[
+        "ไม้คลึงแป้ง",
+        "พิมพ์กดวงกลมขนาดประมาณ 8 ซม. (หรือใช้แก้วคว่ำ)",
+        "กระทะเคลือบกันติดขนาดใหญ่พร้อมฝาปิด",
+        "ตะแกรงสำหรับพักให้เย็น",
+      ],
+    },
+    steps:{
+      fr:[
+        {head:"1 — Pétrissage"},
+        "Mélanger le lait tiède (environ 35°C, pas plus chaud), la levure et le sucre.",
+        "Ajouter la farine, le sel et le beurre mou, puis pétrir environ 10 minutes pour former une pâte souple, lisse et légèrement collante.",
+        {head:"2 — Levée"},
+        "Former une boule, la déposer dans un saladier couvert d'un torchon ou de film alimentaire, et laisser lever 1h30 à 2h, jusqu'à ce que la pâte double de volume.",
+        {head:"3 — Façonnage"},
+        "Sur un plan de travail légèrement fariné, étaler la pâte au rouleau sur environ 1,5 cm d'épaisseur, sans l'écraser.",
+        "Découper des cercles à l'emporte-pièce. Rassembler les chutes, les étaler de nouveau et découper encore.",
+        "Enrober chaque muffin de semoule sur les deux faces.",
+        {head:"4 — Cuisson à la poêle"},
+        "Chauffer la poêle à feu doux-moyen, sans matière grasse ou avec très peu de gras.",
+        "Cuire les muffins environ 5 minutes sans les toucher, couvercle posé, jusqu'à ce que le dessous soit bien doré.",
+        "Les retourner et cuire encore environ 5 minutes sur l'autre face. Les côtés doivent être fermes au toucher.",
+        {head:"5 — Refroidissement et service"},
+        "Laisser refroidir sur une grille. Pour servir, ouvrir chaque muffin en deux à la fourchette (plutôt qu'au couteau) et le faire griller.",
+      ],
+      en:[
+        {head:"1 — Kneading"},
+        "Mix the warm milk (about 35°C, no hotter), the yeast and the sugar.",
+        "Add the flour, salt and soft butter, then knead for about 10 minutes to form a soft, smooth, slightly sticky dough.",
+        {head:"2 — Rising"},
+        "Shape into a ball, place it in a bowl covered with a tea towel or cling film, and leave to rise for 1h30 to 2h, until the dough has doubled in size.",
+        {head:"3 — Shaping"},
+        "On a lightly floured surface, roll the dough out to about 1.5 cm thick, without crushing it.",
+        "Cut out rounds with the cutter. Gather the scraps, roll them out again and cut more rounds.",
+        "Coat each muffin in semolina on both sides.",
+        {head:"4 — Pan cooking"},
+        "Heat the pan over low-medium heat, with no fat or just a very little.",
+        "Cook the muffins for about 5 minutes without touching them, lid on, until the underside is nicely golden.",
+        "Turn them over and cook for about 5 more minutes on the other side. The sides should feel firm.",
+        {head:"5 — Cooling and serving"},
+        "Leave to cool on a wire rack. To serve, split each muffin in half with a fork (rather than a knife) and toast it.",
+      ],
+      de:[
+        {head:"1 — Kneten"},
+        "Die lauwarme Milch (etwa 35°C, nicht wärmer), die Hefe und den Zucker vermischen.",
+        "Mehl, Salz und weiche Butter hinzufügen und etwa 10 Minuten zu einem weichen, glatten, leicht klebrigen Teig kneten.",
+        {head:"2 — Gehen lassen"},
+        "Zu einer Kugel formen, in eine mit einem Tuch oder Frischhaltefolie abgedeckte Schüssel legen und 1,5 bis 2 Stunden gehen lassen, bis sich das Volumen verdoppelt hat.",
+        {head:"3 — Formen"},
+        "Den Teig auf einer leicht bemehlten Arbeitsfläche etwa 1,5 cm dick ausrollen, ohne ihn zu zerdrücken.",
+        "Mit dem Ausstecher Kreise ausstechen. Die Reste zusammenfügen, erneut ausrollen und weitere Kreise ausstechen.",
+        "Jeden Muffin auf beiden Seiten in Grieß wälzen.",
+        {head:"4 — In der Pfanne backen"},
+        "Die Pfanne bei niedriger bis mittlerer Hitze erhitzen, ohne Fett oder mit sehr wenig Fett.",
+        "Die Muffins etwa 5 Minuten mit Deckel backen, ohne sie zu bewegen, bis die Unterseite schön goldbraun ist.",
+        "Wenden und die andere Seite weitere etwa 5 Minuten backen. Die Seiten sollten sich fest anfühlen.",
+        {head:"5 — Abkühlen und Servieren"},
+        "Auf einem Gitter abkühlen lassen. Zum Servieren jeden Muffin mit einer Gabel (statt mit einem Messer) halbieren und toasten.",
+      ],
+      th:[
+        {head:"1 — นวดแป้ง"},
+        "ผสมนมอุ่น (ประมาณ 35°C ไม่ร้อนกว่านี้) ยีสต์ และน้ำตาลเข้าด้วยกัน",
+        "ใส่แป้ง เกลือ และเนยนิ่ม แล้วนวดประมาณ 10 นาที จนได้แป้งที่นุ่ม เนียน และเหนียวมือเล็กน้อย",
+        {head:"2 — พักให้แป้งขึ้น"},
+        "ปั้นแป้งเป็นก้อนกลม ใส่ชามแล้วคลุมด้วยผ้าหรือฟิล์มถนอมอาหาร พักไว้ 1 ชั่วโมง 30 นาทีถึง 2 ชั่วโมง จนแป้งขึ้นฟูเป็นสองเท่า",
+        {head:"3 — ขึ้นรูป"},
+        "โรยแป้งบาง ๆ บนพื้นที่ทำงาน แล้วคลึงแป้งให้หนาประมาณ 1.5 ซม. โดยไม่กดแป้งแรงเกินไป",
+        "ใช้พิมพ์กดแป้งเป็นวงกลม รวบเศษแป้งที่เหลือ คลึงใหม่ แล้วกดพิมพ์ต่อ",
+        "คลุกมัฟฟินแต่ละชิ้นกับเซโมลินาทั้งสองด้าน",
+        {head:"4 — อบในกระทะ"},
+        "ตั้งกระทะด้วยไฟอ่อนถึงปานกลาง ไม่ต้องใช้น้ำมัน หรือใช้เพียงเล็กน้อย",
+        "วางมัฟฟินลงในกระทะ ปิดฝา และปล่อยไว้ประมาณ 5 นาทีโดยไม่ต้องขยับ จนด้านล่างเป็นสีเหลืองทอง",
+        "กลับด้านแล้วอบต่ออีกประมาณ 5 นาที ด้านข้างควรแน่นเมื่อกดดู",
+        {head:"5 — พักให้เย็นและเสิร์ฟ"},
+        "วางพักให้เย็นบนตะแกรง เวลาเสิร์ฟให้ใช้ส้อมแบะมัฟฟินออกเป็นสองซีก (แทนการใช้มีด) แล้วนำไปปิ้ง",
+      ],
+    },
+    note:{
+      fr:"En Thaïlande, la chaleur accélère la levée : vérifier la pâte dès 1h. Le lait ne doit pas dépasser 35-40°C, sinon la levure est détruite. Si les muffins semblent un peu denses, laisser reposer les cercles découpés 20 minutes sous un torchon avant la cuisson. Garder le feu doux-moyen : trop fort, l'extérieur brûle avant que le cœur soit cuit.",
+      en:"In Thailand, the heat speeds up the rise, so check the dough from 1 hour. The milk must not go above 35-40°C, or it will kill the yeast. If the muffins turn out a little dense, let the cut rounds rest for 20 minutes under a tea towel before cooking. Keep the heat low-medium: too high and the outside burns before the inside is cooked.",
+      de:"In Thailand beschleunigt die Wärme das Aufgehen, daher den Teig schon nach 1 Stunde prüfen. Die Milch darf nicht wärmer als 35-40°C sein, sonst stirbt die Hefe ab. Falls die Muffins etwas kompakt geraten, die ausgestochenen Kreise vor dem Backen 20 Minuten unter einem Tuch ruhen lassen. Die Hitze niedrig bis mittel halten: Ist sie zu hoch, verbrennt die Außenseite, bevor das Innere gar ist.",
+      th:"ในประเทศไทย อากาศร้อนทำให้แป้งขึ้นเร็วขึ้น ควรเริ่มตรวจแป้งตั้งแต่ 1 ชั่วโมง นมต้องไม่ร้อนเกิน 35-40°C มิฉะนั้นยีสต์จะตาย หากมัฟฟินแน่นเกินไป ให้พักแป้งที่กดพิมพ์แล้วใต้ผ้า 20 นาทีก่อนนำไปอบ ควรใช้ไฟอ่อนถึงปานกลาง หากไฟแรงเกินไป ด้านนอกจะไหม้ก่อนที่ด้านในจะสุก",
+    },
+    /* index (0-based, hors {head}) -> durée par défaut en minutes */
+    timers:{
+      1:10,   // Pétrissage
+      2:105,  // Levée (1h30 à 2h)
+      7:5,    // Cuisson première face
+      8:5,    // Cuisson deuxième face
     },
   },
 
@@ -3799,7 +3942,7 @@ function renderRecipe(key){
   let html = `
     <h2 class="recipe-hero">${r.title[lang]}</h2>
     <p class="recipe-tag">${r.tag[lang]}</p>
-    ${r.photo ? `<img class="recipe-photo" src="${r.photo}" alt="${r.title[lang]}">` : ""}
+    ${(r.photo && r.photo !== "PHOTO_A_AJOUTER") ? `<img class="recipe-photo" src="${r.photo}" alt="${r.title[lang]}">` : ""}
     <div class="stepper-card">
       <div class="label">${r.unitLabel[lang]}</div>
       <div class="stepper">
