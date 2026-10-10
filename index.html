@@ -1684,9 +1684,10 @@ const UNITS = {
 };
 
 /* ===================== VERSION ===================== */
-const APP_VERSION = "01.06.006";
+const APP_VERSION = "01.06.007";
 const APP_VERSION_DATE = "10 octobre 2026";
 const CHANGELOG = [
+  { version:"01.06.007", date:"10 octobre 2026", note:"Pain au lait SIGNATURE : « poudre à lever » remplacée par « levure SAF Instant » dans la liste d'ingrédients (mention barrée retirée) et dans les étapes 1 et 2, dans les 4 langues." },
   { version:"01.06.006", date:"10 octobre 2026", note:"Pain au lait SIGNATURE : suppression des raisins secs (ingrédient, étape d'incorporation, titre de la section 6 devenu « Dégazage »). Pâton ramené à ~525 g, soit 8 pains d'environ 65 g. Nutrition recalculée sans raisins (322 kcal/100 g, 308 kcal par pain). Minuteurs réindexés." },
   { version:"01.06.005", date:"10 octobre 2026", note:"Titre de la recette changé en « Pain au lait SIGNATURE » (Milk Bread SIGNATURE / Milchbrötchen SIGNATURE / ขนมปังนมซิกเนเจอร์)." },
   { version:"01.06.004", date:"10 octobre 2026", note:"Pain au Lait Raisin Signature renommé « Pain au Lait » (Milk Bread / Milchbrötchen / ขนมปังนม), identique au libellé déjà utilisé dans la catégorie Pain." },
@@ -2512,7 +2513,7 @@ const recipes = {
     ingredients:[
       {fr:"Farine tout usage", en:"All-purpose flour", de:"Allzweckmehl", th:"แป้งอเนกประสงค์", base:320, unit:"g",
        prod:{fr:"Blue Cherry All Purpose Flour", en:"Blue Cherry All Purpose Flour", de:"Blue Cherry All Purpose Flour", th:"Blue Cherry All Purpose Flour"}},
-      {fr:"Poudre à lever <s>(Baking Powder)</s> <strong>Levure SAF Instant</strong>", en:"<s>Baking powder</s> <strong>Instant SAF yeast</strong>", de:"<s>Backpulver</s> <strong>Instanthefe SAF</strong>", th:"<s>ผงฟู</s> <strong>ยีสต์สำเร็จรูป SAF</strong>", base:10, unit:"g",
+      {fr:"Levure SAF Instant", en:"Instant SAF yeast", de:"Instanthefe SAF", th:"ยีสต์สำเร็จรูป SAF", base:10, unit:"g",
        prod:{fr:"Levure SAF Instant", en:"Instant SAF yeast", de:"Instanthefe SAF", th:"ยีสต์สำเร็จรูป SAF"}},
       {fr:"Lait tiède", en:"Warm milk", de:"Lauwarme Milch", th:"นมอุ่น", base:160, unit:"g",
        prod:{fr:"Non listé — à ajouter", en:"Not listed — to buy", de:"Nicht gelistet — zu besorgen", th:"ยังไม่มีในคลัง — ต้องซื้อเพิ่ม"}},
@@ -2532,8 +2533,8 @@ const recipes = {
     steps:{
       fr:[
         {head:"1 — Mélange initial"},
-        "Dans la cuve du batteur, verser la farine, le lait tiède, la poudre à lever et le sucre.",
-        "Ajouter le sel sur le côté, à distance de la poudre à lever.",
+        "Dans la cuve du batteur, verser la farine, le lait tiède, la levure SAF Instant et le sucre.",
+        "Ajouter le sel sur le côté, à distance de la levure SAF Instant.",
         {head:"2 — Premier pétrissage"},
         "Pétrir 6 à 8 minutes à vitesse 1, jusqu'à ce que la pâte devienne homogène, souple et commence à être élastique.",
         "Laisser reposer 6 à 8 minutes.",
@@ -2570,8 +2571,8 @@ const recipes = {
       ],
       en:[
         {head:"1 — Initial mix"},
-        "In the mixer bowl, pour in the flour, warm milk, baking powder and sugar.",
-        "Add the salt to the side, away from the baking powder.",
+        "In the mixer bowl, pour in the flour, warm milk, Instant SAF yeast and sugar.",
+        "Add the salt to the side, away from the Instant SAF yeast.",
         {head:"2 — First kneading"},
         "Knead for 6 to 8 minutes at speed 1, until the dough becomes even, soft and starts to feel elastic.",
         "Let rest for 6 to 8 minutes.",
@@ -2608,8 +2609,8 @@ const recipes = {
       ],
       de:[
         {head:"1 — Erstes Vermischen"},
-        "In die Rührschüssel Mehl, lauwarme Milch, Backpulver und Zucker geben.",
-        "Das Salz seitlich dazugeben, entfernt vom Backpulver.",
+        "In die Rührschüssel Mehl, lauwarme Milch, Instanthefe SAF und Zucker geben.",
+        "Das Salz seitlich dazugeben, entfernt von der Instanthefe SAF.",
         {head:"2 — Erstes Kneten"},
         "6 bis 8 Minuten bei Stufe 1 kneten, bis der Teig gleichmäßig, geschmeidig wird und leicht elastisch wirkt.",
         "6 bis 8 Minuten ruhen lassen.",
@@ -2646,8 +2647,8 @@ const recipes = {
       ],
       th:[
         {head:"1 — ผสมส่วนผสมเริ่มต้น"},
-        "ใส่แป้ง นมอุ่น ผงฟู และน้ำตาลลงในชามผสมของเครื่องตี",
-        "ใส่เกลือด้านข้าง ให้ห่างจากผงฟู",
+        "ใส่แป้ง นมอุ่น ยีสต์สำเร็จรูป SAF และน้ำตาลลงในชามผสมของเครื่องตี",
+        "ใส่เกลือด้านข้าง ให้ห่างจากยีสต์สำเร็จรูป SAF",
         {head:"2 — การนวดครั้งแรก"},
         "นวด 6-8 นาทีที่ความเร็วระดับ 1 จนแป้งเนียนขึ้น นุ่ม และเริ่มมีความยืดหยุ่น",
         "พักแป้ง 6-8 นาที",
