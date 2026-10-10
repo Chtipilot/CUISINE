@@ -1388,7 +1388,7 @@ const UI = {
     couscous:{fr:"Couscous", en:"Couscous", de:"Couscous", th:"คูสคูส"},
     gateau_banane:{fr:"Gâteau Banane", en:"Banana Cake", de:"Bananenkuchen", th:"เค้กกล้วย"},
     gateau_coco:{fr:"Gâteau Coco", en:"Coconut Cake", de:"Kokoskuchen", th:"เค้กมะพร้าว"},
-    gateau_raisins:{fr:"Gâteau Raisins", en:"Raisin Cake", de:"Rosinenkuchen", th:"เค้กลูกเกด"},
+    gateau_raisins:{fr:"Brioche aux raisins", en:"Raisin Brioche", de:"Rosinenbrioche", th:"บริยอชลูกเกด"},
     thailande:{fr:"Thaïlande", en:"Thailand", de:"Thailand", th:"ไทย"},
     apropos:{fr:"À propos", en:"About", de:"Über uns", th:"เกี่ยวกับเรา"},
   },
@@ -1407,7 +1407,7 @@ const UI = {
     },
     gateau:{
       label:{fr:"Gâteau", en:"Cake", de:"Kuchen", th:"เค้ก"},
-      desc:{fr:"Congolais, Gâteau Banane, Gâteau Coco, Gâteau Raisins, Kouglof, Madeleines", en:"Congolais, Banana Cake, Coconut Cake, Raisin Cake, Kouglof, Madeleines", de:"Congolais, Bananenkuchen, Kokoskuchen, Rosinenkuchen, Kouglof, Madeleines", th:"คองโกเล่ต์, เค้กกล้วย, เค้กมะพร้าว, เค้กลูกเกด, คูโกลฟ, มาเดอลีน"},
+      desc:{fr:"Congolais, Gâteau Banane, Gâteau Coco, Brioche aux raisins, Kouglof, Madeleines", en:"Congolais, Banana Cake, Coconut Cake, Raisin Brioche, Kouglof, Madeleines", de:"Congolais, Bananenkuchen, Kokoskuchen, Rosinenbrioche, Kouglof, Madeleines", th:"คองโกเล่ต์, เค้กกล้วย, เค้กมะพร้าว, บริยอชลูกเกด, คูโกลฟ, มาเดอลีน"},
       icon:"🎂",
       recipes:["congolais","gateau_banane","gateau_coco","gateau_raisins","kouglof","madeleines"],
     },
@@ -1684,9 +1684,10 @@ const UNITS = {
 };
 
 /* ===================== VERSION ===================== */
-const APP_VERSION = "01.06.007";
+const APP_VERSION = "01.06.008";
 const APP_VERSION_DATE = "10 octobre 2026";
 const CHANGELOG = [
+  { version:"01.06.008", date:"10 octobre 2026", note:"Gâteau aux Raisins renommé « Brioche aux raisins » (Raisin Brioche / Rosinenbrioche / บริยอชลูกเกด) : titre de la recette, nom court et liste de la catégorie Gâteau." },
   { version:"01.06.007", date:"10 octobre 2026", note:"Pain au lait SIGNATURE : « poudre à lever » remplacée par « levure SAF Instant » dans la liste d'ingrédients (mention barrée retirée) et dans les étapes 1 et 2, dans les 4 langues." },
   { version:"01.06.006", date:"10 octobre 2026", note:"Pain au lait SIGNATURE : suppression des raisins secs (ingrédient, étape d'incorporation, titre de la section 6 devenu « Dégazage »). Pâton ramené à ~525 g, soit 8 pains d'environ 65 g. Nutrition recalculée sans raisins (322 kcal/100 g, 308 kcal par pain). Minuteurs réindexés." },
   { version:"01.06.005", date:"10 octobre 2026", note:"Titre de la recette changé en « Pain au lait SIGNATURE » (Milk Bread SIGNATURE / Milchbrötchen SIGNATURE / ขนมปังนมซิกเนเจอร์)." },
@@ -3384,7 +3385,7 @@ const recipes = {
   },
 
   gateau_raisins: {
-    title:{fr:"Gâteau aux Raisins", en:"Raisin Cake", de:"Rosinenkuchen", th:"เค้กลูกเกด"},
+    title:{fr:"Brioche aux raisins", en:"Raisin Brioche", de:"Rosinenbrioche", th:"บริยอชลูกเกด"},
     tag:{fr:"6 parts", en:"6 servings", de:"6 Portionen", th:"6 ส่วน"},
     unitLabel:{fr:"Nombre de parts souhaité", en:"Number of servings desired", de:"Gewünschte Anzahl Portionen", th:"จำนวนส่วนที่ต้องการ"},
     baseCount:6, min:1, max:24, step:1,
