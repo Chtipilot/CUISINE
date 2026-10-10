@@ -1684,9 +1684,12 @@ const UNITS = {
 };
 
 /* ===================== VERSION ===================== */
-const APP_VERSION = "01.06.002";
-const APP_VERSION_DATE = "26 septembre 2026";
+const APP_VERSION = "01.06.005";
+const APP_VERSION_DATE = "10 octobre 2026";
 const CHANGELOG = [
+  { version:"01.06.005", date:"10 octobre 2026", note:"Titre de la recette changé en « Pain au lait SIGNATURE » (Milk Bread SIGNATURE / Milchbrötchen SIGNATURE / ขนมปังนมซิกเนเจอร์)." },
+  { version:"01.06.004", date:"10 octobre 2026", note:"Pain au Lait Raisin Signature renommé « Pain au Lait » (Milk Bread / Milchbrötchen / ขนมปังนม), identique au libellé déjà utilisé dans la catégorie Pain." },
+  { version:"01.06.003", date:"10 octobre 2026", note:"Pain au Lait Raisin Signature : suppression du paragraphe de note « Cette recette est levée à la poudre à lever… » affiché après la dernière étape (Bonne dégustation), dans les 4 langues." },
   { version:"01.06.002", date:"26 septembre 2026", note:"Muffins anglais : ajout dans la note des cuissons alternatives — four traditionnel (180°C, 15-18 min, ou saisie à la poêle puis four) et airfryer (160-170°C, 8-10 min) — avec les repères de cuisson (côtés fermes, 92-94°C à cœur)." },
   { version:"01.06.001", date:"26 septembre 2026", note:"Muffins anglais : ajout de l'alternative au lait frais — 20 g de lait en poudre entier + 145 ml d'eau tiède (quantités ajustables avec le nombre de muffins), étape 1 et note complétées." },
   { version:"01.06.000", date:"26 septembre 2026", note:"Nouvelle recette : Muffins anglais (pain anglais), catégorie Pain. Pâte levée lait/beurre, levée 1h30-2h, découpe à l'emporte-pièce, enrobage de semoule, cuisson à la poêle 2 × 5 min, sans four. 8 muffins d'environ 60 g, nutrition calculée. Les recettes sans photo n'affichent plus d'image cassée. Photo à ajouter ultérieurement." },
@@ -2495,7 +2498,7 @@ const recipes = {
   },
 
   pain_au_lait_raisin: {
-    title:{fr:"Pain au Lait Raisin Signature", en:"Signature Raisin Milk Bread", de:"Rosinen-Milchbrötchen Signature", th:"ขนมปังนมลูกเกดซิกเนเจอร์"},
+    title:{fr:"Pain au lait SIGNATURE", en:"Milk Bread SIGNATURE", de:"Milchbrötchen SIGNATURE", th:"ขนมปังนมซิกเนเจอร์"},
     tag:{fr:"8 petits pains, ~72 g chacun — pétrissage en 2 temps, four traditionnel", en:"8 rolls, ~72 g each — two-stage kneading, traditional oven", de:"8 Brötchen, je ~72 g — zweistufiges Kneten, herkömmlicher Ofen", th:"ขนมปัง 8 ก้อน ก้อนละประมาณ 72 กรัม — นวด 2 ขั้นตอน อบด้วยเตาอบทั่วไป"},
     unitLabel:{fr:"Nombre de petits pains souhaité", en:"Number of rolls desired", de:"Gewünschte Anzahl Brötchen", th:"จำนวนขนมปังที่ต้องการ"},
     baseCount:8, min:1, max:48, step:1,
@@ -2684,12 +2687,6 @@ const recipes = {
         "พักให้เย็นบนตะแกรง อย่าเพิ่งตัดก่อน 30 นาที (เนื้อขนมปังจะเซ็ตตัวสมบูรณ์ระหว่างการพักเย็น)",
         "รับประทานให้อร่อย!",
       ],
-    },
-    note:{
-      fr:"Cette recette est levée à la poudre à lever (baking powder) et non à la levure de boulanger — pas de longue fermentation à la levure, mais la pâte reste sensible à la température (objectif 24-26°C en fin de pétrissage). Prévoir un petit récipient d'eau dans le four en début de cuisson pour éviter que la croûte ne craque.",
-      en:"This recipe is leavened with baking powder rather than baker's yeast, so it doesn't rely on long yeast fermentation, but the dough stays sensitive to temperature (aim for 24-26°C at the end of kneading). Place a small container of water in the oven at the start of baking to stop the crust from cracking.",
-      de:"Dieses Rezept wird mit Backpulver statt mit Backhefe gelockert, daher ist keine lange Hefegare nötig, der Teig reagiert aber weiterhin empfindlich auf die Temperatur (Ziel: 24-26°C am Ende des Knetens). Zu Beginn des Backens ein kleines Gefäß mit Wasser in den Ofen stellen, damit die Kruste nicht aufreißt.",
-      th:"สูตรนี้ขึ้นฟูด้วยผงฟูแทนยีสต์ทำขนมปัง จึงไม่ต้องพักแป้งด้วยยีสต์เป็นเวลานาน แต่แป้งยังคงไวต่ออุณหภูมิ (เป้าหมายคือ 24-26°C หลังนวดเสร็จ) ควรวางภาชนะใส่น้ำในเตาอบช่วงเริ่มอบเพื่อป้องกันเปลือกขนมปังแตก",
     },
     /* index (0-based, hors {head}) -> durée par défaut en minutes */
     timers:{
