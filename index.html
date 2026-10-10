@@ -1684,9 +1684,10 @@ const UNITS = {
 };
 
 /* ===================== VERSION ===================== */
-const APP_VERSION = "01.06.005";
+const APP_VERSION = "01.06.006";
 const APP_VERSION_DATE = "10 octobre 2026";
 const CHANGELOG = [
+  { version:"01.06.006", date:"10 octobre 2026", note:"Pain au lait SIGNATURE : suppression des raisins secs (ingrédient, étape d'incorporation, titre de la section 6 devenu « Dégazage »). Pâton ramené à ~525 g, soit 8 pains d'environ 65 g. Nutrition recalculée sans raisins (322 kcal/100 g, 308 kcal par pain). Minuteurs réindexés." },
   { version:"01.06.005", date:"10 octobre 2026", note:"Titre de la recette changé en « Pain au lait SIGNATURE » (Milk Bread SIGNATURE / Milchbrötchen SIGNATURE / ขนมปังนมซิกเนเจอร์)." },
   { version:"01.06.004", date:"10 octobre 2026", note:"Pain au Lait Raisin Signature renommé « Pain au Lait » (Milk Bread / Milchbrötchen / ขนมปังนม), identique au libellé déjà utilisé dans la catégorie Pain." },
   { version:"01.06.003", date:"10 octobre 2026", note:"Pain au Lait Raisin Signature : suppression du paragraphe de note « Cette recette est levée à la poudre à lever… » affiché après la dernière étape (Bonne dégustation), dans les 4 langues." },
@@ -2499,13 +2500,13 @@ const recipes = {
 
   pain_au_lait_raisin: {
     title:{fr:"Pain au lait SIGNATURE", en:"Milk Bread SIGNATURE", de:"Milchbrötchen SIGNATURE", th:"ขนมปังนมซิกเนเจอร์"},
-    tag:{fr:"8 petits pains, ~72 g chacun — pétrissage en 2 temps, four traditionnel", en:"8 rolls, ~72 g each — two-stage kneading, traditional oven", de:"8 Brötchen, je ~72 g — zweistufiges Kneten, herkömmlicher Ofen", th:"ขนมปัง 8 ก้อน ก้อนละประมาณ 72 กรัม — นวด 2 ขั้นตอน อบด้วยเตาอบทั่วไป"},
+    tag:{fr:"8 petits pains, ~65 g chacun — pétrissage en 2 temps, four traditionnel", en:"8 rolls, ~65 g each — two-stage kneading, traditional oven", de:"8 Brötchen, je ~65 g — zweistufiges Kneten, herkömmlicher Ofen", th:"ขนมปัง 8 ก้อน ก้อนละประมาณ 65 กรัม — นวด 2 ขั้นตอน อบด้วยเตาอบทั่วไป"},
     unitLabel:{fr:"Nombre de petits pains souhaité", en:"Number of rolls desired", de:"Gewünschte Anzahl Brötchen", th:"จำนวนขนมปังที่ต้องการ"},
     baseCount:8, min:1, max:48, step:1,
 
     nutrition:{
-      per100:{kcal:318, protein:6.4, carbs:42.1, sugars:11.3, fat:14.0, sat:8.1, fiber:1.4},
-      perUnit:{kcal:335, protein:6.8, carbs:44.4, sugars:11.9, fat:14.7, sat:8.6, fiber:1.4},
+      per100:{kcal:322, protein:7.3, carbs:38.8, sugars:6.5, fat:15.2, sat:9.0, fiber:1.5},
+      perUnit:{kcal:308, protein:7.0, carbs:37.2, sugars:6.2, fat:14.6, sat:8.6, fiber:1.4},
     },
     photo:"Photos/pain_au_lait_raisin.jpg",
     ingredients:[
@@ -2517,8 +2518,6 @@ const recipes = {
        prod:{fr:"Non listé — à ajouter", en:"Not listed — to buy", de:"Nicht gelistet — zu besorgen", th:"ยังไม่มีในคลัง — ต้องซื้อเพิ่ม"}},
       {fr:"Sucre en poudre", en:"Granulated sugar", de:"Zucker", th:"น้ำตาลทรายละเอียด", base:40, unit:"g",
        prod:{fr:"Non listé — à ajouter", en:"Not listed — to buy", de:"Nicht gelistet — zu besorgen", th:"ยังไม่มีในคลัง — ต้องซื้อเพิ่ม"}},
-      {fr:"Raisins secs", en:"Raisins", de:"Rosinen", th:"ลูกเกด", base:75, unit:"g",
-       prod:{fr:"Non listés — à ajouter", en:"Not listed — to buy", de:"Nicht gelistet — zu besorgen", th:"ยังไม่มีในคลัง — ต้องซื้อเพิ่ม"}},
       {fr:"Sel fin", en:"Fine salt", de:"Feines Salz", th:"เกลือป่น", base:2, unit:"g",
        prod:{fr:"Non listé — à ajouter", en:"Not listed — to buy", de:"Nicht gelistet — zu besorgen", th:"ยังไม่มีในคลัง — ต้องซื้อเพิ่ม"}},
       {fr:"Œuf battu (peser la quantité)", en:"Beaten egg (weigh the amount)", de:"Verquirltes Ei (abwiegen)", th:"ไข่ตี (ชั่งน้ำหนักตามปริมาณ)", base:50, unit:"g",
@@ -2549,11 +2548,10 @@ const recipes = {
         "Former une boule sans ajouter de farine ni d'huile, remettre dans le batteur arrêté.",
         "Laisser pousser environ 30 minutes, couvert d'un torchon ou de film alimentaire, jusqu'à ce que la pâte augmente d'environ 30 à 50% (vérifier avec le test du doigt).",
         "Recommencer une deuxième pousse de 30 minutes.",
-        {head:"6 — Dégazage et incorporation des raisins"},
+        {head:"6 — Dégazage"},
         "Sur un plan de travail propre et à peine fariné, renverser la pâte et l'aplatir doucement sans la déchirer.",
-        "Répartir les raisins secs bien égouttés sur le dessus, puis rabattre la pâte en deux pour les enfermer (ou les incorporer en mélangeant, en veillant à ne pas les écraser).",
         {head:"7 — Façonnage"},
-        "Former une boule d'environ 580 g, puis diviser en 8 parts égales d'environ 72 g chacune.",
+        "Former une boule d'environ 525 g, puis diviser en 8 parts égales d'environ 65 g chacune.",
         "Façonner chaque part en boule bien soudée en dessous, puis l'allonger légèrement en forme de petit pain, sans l'écraser.",
         "Déposer les pains sur une plaque recouverte de papier cuisson.",
         {head:"8 — Deuxième fermentation"},
@@ -2588,11 +2586,10 @@ const recipes = {
         "Shape into a ball with no added flour or oil, put back in the stopped mixer bowl.",
         "Let rise for about 30 minutes, covered with a cloth or plastic wrap, until the dough increases by about 30 to 50% (check with the finger test).",
         "Let rise a second time for another 30 minutes.",
-        {head:"6 — Knocking back and adding the raisins"},
+        {head:"6 — Knocking back"},
         "On a clean, lightly floured surface, turn out the dough and gently flatten it without tearing it.",
-        "Spread the well-drained raisins on top, then fold the dough in half to enclose them (or mix them in, taking care not to crush them).",
         {head:"7 — Shaping"},
-        "Form a ball of about 580 g, then divide into 8 equal pieces of about 72 g each.",
+        "Form a ball of about 525 g, then divide into 8 equal pieces of about 65 g each.",
         "Shape each piece into a tight ball with the seam underneath, then gently elongate it into a small roll shape without pressing it flat.",
         "Place the rolls on a baking tray lined with parchment paper.",
         {head:"8 — Second rise"},
@@ -2627,11 +2624,10 @@ const recipes = {
         "Ohne zusätzliches Mehl oder Öl zu einer Kugel formen und in die ausgeschaltete Rührschüssel zurücklegen.",
         "Etwa 30 Minuten mit einem Tuch oder Frischhaltefolie abgedeckt gehen lassen, bis der Teig um etwa 30 bis 50 % zugenommen hat (mit dem Fingertest prüfen).",
         "Ein zweites Mal 30 Minuten gehen lassen.",
-        {head:"6 — Entgasen und Rosinen einarbeiten"},
+        {head:"6 — Entgasen"},
         "Auf einer sauberen, leicht bemehlten Fläche den Teig stürzen und vorsichtig flach drücken, ohne ihn zu reißen.",
-        "Die gut abgetropften Rosinen darauf verteilen, dann den Teig zur Hälfte falten, um sie einzuschließen (oder vorsichtig einarbeiten, ohne sie zu zerdrücken).",
         {head:"7 — Formen"},
-        "Eine Kugel von etwa 580 g formen, dann in 8 gleiche Stücke von etwa 72 g teilen.",
+        "Eine Kugel von etwa 525 g formen, dann in 8 gleiche Stücke von etwa 65 g teilen.",
         "Jedes Stück zu einer straffen Kugel mit der Naht nach unten formen, dann leicht zu einem kleinen Brötchen länglich formen, ohne es platt zu drücken.",
         "Die Brötchen auf ein mit Backpapier ausgelegtes Blech legen.",
         {head:"8 — Zweite Gare"},
@@ -2666,11 +2662,10 @@ const recipes = {
         "ขึ้นรูปเป็นก้อนกลมโดยไม่ใส่แป้งหรือน้ำมันเพิ่ม แล้วนำกลับไปวางในชามผสมที่ปิดเครื่องแล้ว",
         "พักแป้งให้ขึ้นฟูประมาณ 30 นาที คลุมด้วยผ้าขนหนูหรือพลาสติกห่ออาหาร จนแป้งขยายตัวประมาณ 30-50% (ตรวจสอบด้วยการทดสอบนิ้ว)",
         "พักแป้งขึ้นฟูอีกครั้ง 30 นาที",
-        {head:"6 — ไล่อากาศและใส่ลูกเกด"},
+        {head:"6 — ไล่อากาศ"},
         "บนพื้นผิวที่สะอาดและโรยแป้งเล็กน้อย นำแป้งออกมาแล้วกดให้แบนเบา ๆ โดยไม่ให้ฉีกขาด",
-        "โรยลูกเกดที่สะเด็ดน้ำดีแล้วลงบนแป้ง แล้วพับแป้งครึ่งหนึ่งเพื่อห่อลูกเกดไว้ข้างใน (หรือผสมให้เข้ากัน โดยระวังไม่ให้ลูกเกดแตก)",
         {head:"7 — การขึ้นรูป"},
-        "ขึ้นรูปเป็นก้อนกลมประมาณ 580 กรัม แล้วแบ่งเป็น 8 ส่วนเท่า ๆ กัน ส่วนละประมาณ 72 กรัม",
+        "ขึ้นรูปเป็นก้อนกลมประมาณ 525 กรัม แล้วแบ่งเป็น 8 ส่วนเท่า ๆ กัน ส่วนละประมาณ 65 กรัม",
         "ขึ้นรูปแต่ละส่วนเป็นก้อนกลมแน่น โดยให้รอยตะเข็บอยู่ด้านล่าง จากนั้นยืดให้เป็นรูปขนมปังก้อนเล็กเล็กน้อยโดยไม่กดให้แบน",
         "วางขนมปังลงบนถาดที่ปูด้วยกระดาษรองอบ",
         {head:"8 — การหมักครั้งที่สอง"},
@@ -2693,11 +2688,11 @@ const recipes = {
       3:7,    // Repos entre les pétrissages
       10:30,  // Première pousse
       11:30,  // Deuxième pousse
-      17:105, // Deuxième fermentation (1h30 à 2h)
-      19:10,  // Attente entre les deux couches de dorure
-      21:32,  // Cuisson
-      23:5,   // Attente avant démoulage
-      24:30,  // Refroidissement avant de couper
+      16:105, // Deuxième fermentation (1h30 à 2h)
+      18:10,  // Attente entre les deux couches de dorure
+      20:32,  // Cuisson
+      22:5,   // Attente avant démoulage
+      23:30,  // Refroidissement avant de couper
     },
   },
 
